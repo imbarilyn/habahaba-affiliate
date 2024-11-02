@@ -116,3 +116,24 @@
     font-weight: 300;
     font-style: normal;
 }
+
+.custom-popup-class {
+    background-color:#FBEAEA; /* Custom background color */
+    border-radius: 10px; /* Custom border radius */
+}
+
+.custom-title-class {
+    color: #883f3f; /* Custom title color */
+    font-size: 18px; /* Custom title font size */
+}
+.custom-content-class {
+    color: #883f3f; /* Custom content color */
+    font-size: 12px; /* Custom content font size */
+}
+.custom-confirm-button-class {
+    background-color: #883f3f;
+    color: white;
+    font-size: 14px
+;
+
+}
