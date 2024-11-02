@@ -1,0 +1,7 @@
+$primary: #f57e20;
+
+@use 'node_modules/bootstrap/scss/bootstrap' as *;
+
+body {
+    background-color: $primary;
+}

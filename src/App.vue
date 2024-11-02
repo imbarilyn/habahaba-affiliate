@@ -30,7 +30,7 @@ const notificationsStore = useNotificationsStore()
 </template>
 
 <style scoped>
-@import "styles.css";
+@import "css/styles.css";
 
 
 body {
