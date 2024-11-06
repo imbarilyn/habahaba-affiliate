@@ -8,17 +8,21 @@ const closeBanner = ()=>{
 </script>
 
 <template>
-  <RouterView #default="{ Component, route }">
-    <Transition name="route" mode="out-in" appear>
-      <template v-if="Component">
-        <component :is="Component" :key="route.fullPath" />
-      </template>
-    </Transition>
-  </RouterView>
+  <div class="container">
+    <RouterView #default="{ Component, route }">
+      <Transition name="route" mode="out-in" appear>
+        <template v-if="Component">
+          <component :is="Component" :key="route.fullPath" />
+        </template>
+      </Transition>
+    </RouterView>
 
-  <div v-for="(alert, index) in bannerAlertContainer" :key="index" id="banner">
-    <BannerToast :type="alert.type" :message="alert.message" @close="closeBanner" />
+    <div v-for="(alert, index) in bannerAlertContainer" :key="index" id="banner">
+      <BannerToast :type="alert.type" :message="alert.message" @close="closeBanner" />
+    </div>
+
   </div>
+
 </template>
 
 <style scoped>

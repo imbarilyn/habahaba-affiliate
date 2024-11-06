@@ -1,0 +1,26 @@
+$dropdown-link-hover-bg: #feeed6;
+$dropdown-link-hover-color: #421708;
+
+
+
+
+
+@import '../../node_modules/bootstrap/scss/_functions';
+@import '../../node_modules/bootstrap/scss/_variables';
+$custom-theme-colors: (
+        'habahaba-50': #fff8ed,
+        'habahaba-100': #feeed6,
+        'habahaba-200': #fcdaac,
+        'habahaba-300': #fabe77,
+        'habahaba-400': #f79840,
+        'habahaba-500': #f57e20,
+        'habahaba-600': #e66010,
+        'habahaba-700': #bf480f,
+        'habahaba-800': #973915,
+        'habahaba-900': #7a3114,
+        'habahaba-950': #421708
+);
+
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+@import '../../node_modules/bootstrap/scss/bootstrap';

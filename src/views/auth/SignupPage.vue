@@ -281,7 +281,7 @@ const handleSubmit = () => {
                     />
                   </div>
                   <div class="d-flex justify-content-center">
-                    <p class="fw-light">Hello! Please sign up to get started</p>
+                    <p class="fw-light text-habahaba-500">Hello! Please sign up to get started</p>
                   </div>
                 </div>
                 <div class="card-body">
