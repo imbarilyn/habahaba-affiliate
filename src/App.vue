@@ -7,7 +7,7 @@ const notificationsStore = useNotificationsStore()
 </script>
 
 <template>
-  <div class="container">
+  <div>
     <RouterView #default="{Component, route}">
       <template v-if="Component">
         <component :is="Component" :key="route.fullPath"/>
@@ -30,11 +30,9 @@ const notificationsStore = useNotificationsStore()
 </template>
 
 <style scoped>
-@import "css/styles.css";
 
 
-body {
-  font-family: 'SF Pro Regular', sans-serif, serif,  Ubuntu;
-}
+
+
 
 </style>
