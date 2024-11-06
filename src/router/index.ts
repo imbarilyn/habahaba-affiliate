@@ -27,7 +27,14 @@ const routes = [
   {
     name: 'dashboard',
     path: '/dashboard',
-    component: ()=>import('../views/Dashboard.vue')
+    component: ()=>import('../views/Dashboard.vue'),
+    children: [
+      {
+        name: 'overview',
+        path: '',
+        component: ()=>import('../components/pages/OverviewPage.vue')
+      }
+    ]
   },
   {
     name: 'tncs',
