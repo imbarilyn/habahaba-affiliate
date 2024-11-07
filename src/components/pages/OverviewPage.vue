@@ -334,4 +334,15 @@
 
 <style scoped>
 
+/* Default font size for larger screens */
+.text-responsive {
+  font-size: 18px; /* Adjust as needed */
+}
+
+/* Smaller font size for small devices */
+@media (max-width: 576px) {
+  .text-responsive {
+    font-size: 14px; /* Adjust for small devices */
+  }
+}
 </style>
