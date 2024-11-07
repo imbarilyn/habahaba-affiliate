@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import AlertMessage from '@/components/AlertMessage.vue'
 import { useAffiliateStore, useNotificationsStore } from '@/stores'
 import DialogModal from '@/components/DialogModal.vue'
+import { useRoute } from 'vue-router'
 
 const affiliateStore = useAffiliateStore()
 const notificationsStore = useNotificationsStore()
@@ -38,32 +39,40 @@ watch(
 const showSpinner = ref(false)
 const showCopyLink = ref(false)
 const affiliateLink = ref('')
-const generateLink = ()=>{
+const generateLink = () => {
   console.log('generating link')
   showSpinner.value = true
-  affiliateStore.getAffiliateLink()
-    .then((resp)=>{
+  affiliateStore
+    .getAffiliateLink()
+    .then(resp => {
       console.log(resp.data)
-      if(resp.result === 'ok'){
+      if (resp.result === 'ok') {
         console.log('Affiliate link!!', resp)
         showSpinner.value = false
 
         showCopyLink.value = true
         affiliateLink.value = resp.data
         console.log(affiliateLink.value)
-      }
-      else{
-        notificationsStore.addNotification('error', 'Error generating affiliate link')
+      } else {
+        notificationsStore.addNotification(
+          'Error generating affiliate link',
+          'error',
+        )
       }
     })
-    .catch((err)=>{
+    .catch(err => {
       console.log(err)
-      notificationsStore.addNotification('error', 'Error generating affiliate link')
+      notificationsStore.addNotification(
+        'Error generating affiliate link',
+        'error',
+      )
     })
-    .finally(()=>{
+    .finally(() => {
       showSpinner.value = false
     })
 }
+
+const route = useRoute()
 </script>
 
 <template>
@@ -223,587 +232,90 @@ const generateLink = ()=>{
         </li>
       </ul>
     </nav>
+    <!--    Sidenav section-->
     <div id="layoutSidenav">
       <div id="layoutSidenav_nav">
-        <nav class="sidenav shadow-right sidenav-light bg-habahaba-900">
+        <nav class="sidenav shadow-right sidenav-light bg-habahaba-950">
           <div class="sidenav-menu">
-            <div class="nav accordion" id="accordionSidenav">
-              <!-- Sidenav Menu Heading (Account)-->
-              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-              <div class="sidenav-menu-heading d-sm-none">Account</div>
-              <!-- Sidenav Link (Alerts)-->
-              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-              <a class="nav-link d-sm-none" href="#!">
-                <div class="nav-link-icon">
-                  <span class="material-icons-outlined"> notifications </span>
+            <div class="pt-4 d-flex flex-column gap-4 ps-3">
+              <div type="button" class="btn">
+                <div class="d-flex gap-2">
+                  <span
+                    class="material-icons-round"
+                    :class="[
+                      route.name === 'overview'
+                        ? 'text-habahaba-300'
+                        : ' text-white',
+                    ]"
+                  >
+                    grid_view
+                  </span>
+                  <span class="fw-medium text-white">Overview</span>
                 </div>
-                Alerts<i data-feather="bell"></i>
-                <span class="badge bg-warning-soft text-warning ms-auto"
-                  >4 New!</span
-                >
-              </a>
-              <!-- Sidenav Link (Messages)-->
-              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-              <a class="nav-link d-sm-none" href="#!">
-                <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                Messages
-                <span class="badge bg-success-soft text-success ms-auto"
-                  >2 New!</span
-                >
-              </a>
-              <!-- Sidenav Menu Heading (Core)-->
-              <div class="sidenav-menu-heading">Core</div>
-              <!-- Sidenav Accordion (Dashboard)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseDashboards"
-                aria-expanded="false"
-                aria-controls="collapseDashboards"
-              >
-                <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                Dashboards
-                <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
-                </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseDashboards"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav
-                  class="sidenav-menu-nested nav accordion"
-                  id="accordionSidenavPages"
-                >
-                  <a class="nav-link" href="#">
-                    Default
-                    <span class="badge bg-primary-soft text-primary ms-auto"
-                      >Updated</span
-                    >
-                  </a>
-                  <a class="nav-link" href="#">Multipurpose</a>
-                  <a class="nav-link" href="#">Affiliate</a>
-                </nav>
               </div>
-              <!-- Sidenav Heading (Custom)-->
-              <div class="sidenav-menu-heading">Custom</div>
-              <!-- Sidenav Accordion (Pages)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapsePages"
-                aria-expanded="false"
-                aria-controls="collapsePages"
-              >
-                <div class="nav-link-icon"><i data-feather="grid"></i></div>
-                Pages
-                <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
-                </div>
-              </a>
               <div
-                class="collapse"
-                id="collapsePages"
-                data-bs-parent="#accordionSidenav"
+                type="button"
+                class="btn dropdown d-flex justify-content-between"
               >
-                <nav
-                  class="sidenav-menu-nested nav accordion"
-                  id="accordionSidenavPagesMenu"
-                >
-                  <!-- Nested Sidenav Accordion (Pages -> Account)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#pagesCollapseAccount"
-                    aria-expanded="false"
-                    aria-controls="pagesCollapseAccount"
-                  >
-                    Account
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="pagesCollapseAccount"
-                    data-bs-parent="#accordionSidenavPagesMenu"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Profile</a>
-                      <a class="nav-link" href="#">Billing</a>
-                      <a class="nav-link" href="#">Security</a>
-                      <a class="nav-link" href="#">Notifications</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Pages -> Authentication)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#pagesCollapseAuth"
-                    aria-expanded="false"
-                    aria-controls="pagesCollapseAuth"
-                  >
-                    Authentication
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="pagesCollapseAuth"
-                    data-bs-parent="#accordionSidenavPagesMenu"
-                  >
-                    <nav
-                      class="sidenav-menu-nested nav accordion"
-                      id="accordionSidenavPagesAuth"
-                    >
-                      <!-- Nested Sidenav Accordion (Pages -> Authentication -> Basic)-->
-                      <a
-                        class="nav-link collapsed"
-                        href="javascript:void(0);"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#pagesCollapseAuthBasic"
-                        aria-expanded="false"
-                        aria-controls="pagesCollapseAuthBasic"
-                      >
-                        Basic
-                        <div class="sidenav-collapse-arrow">
-                          <i class="fas fa-angle-down"></i>
-                        </div>
-                      </a>
-                      <div
-                        class="collapse"
-                        id="pagesCollapseAuthBasic"
-                        data-bs-parent="#accordionSidenavPagesAuth"
-                      >
-                        <nav class="sidenav-menu-nested nav">
-                          <a class="nav-link" href="#">Login</a>
-                          <a class="nav-link" href="#">Register</a>
-                          <a class="nav-link" href="#">Forgot Password</a>
-                        </nav>
-                      </div>
-                      <!-- Nested Sidenav Accordion (Pages -> Authentication -> Social)-->
-                      <a
-                        class="nav-link collapsed"
-                        href="javascript:void(0);"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#pagesCollapseAuthSocial"
-                        aria-expanded="false"
-                        aria-controls="pagesCollapseAuthSocial"
-                      >
-                        Social
-                        <div class="sidenav-collapse-arrow">
-                          <i class="fas fa-angle-down"></i>
-                        </div>
-                      </a>
-                      <div
-                        class="collapse"
-                        id="pagesCollapseAuthSocial"
-                        data-bs-parent="#accordionSidenavPagesAuth"
-                      >
-                        <nav class="sidenav-menu-nested nav">
-                          <a class="nav-link" href="#">Login</a>
-                          <a class="nav-link" href="#">Register</a>
-                          <a class="nav-link" href="#">Forgot Password</a>
-                        </nav>
-                      </div>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Pages -> Error)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#pagesCollapseError"
-                    aria-expanded="false"
-                    aria-controls="pagesCollapseError"
-                  >
-                    Error
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="pagesCollapseError"
-                    data-bs-parent="#accordionSidenavPagesMenu"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">400 Error</a>
-                      <a class="nav-link" href="#">401 Error</a>
-                      <a class="nav-link" href="#">403 Error</a>
-                      <a class="nav-link" href="#">404 Error 1</a>
-                      <a class="nav-link" href="#">404 Error 2</a>
-                      <a class="nav-link" href="#">500 Error</a>
-                      <a class="nav-link" href="#">503 Error</a>
-                      <a class="nav-link" href="#">504 Error</a>
-                    </nav>
-                  </div>
-                  <a class="nav-link" href="#">Pricing</a>
-                  <a class="nav-link" href="#">Invoice</a>
-                </nav>
-              </div>
-              <!-- Sidenav Accordion (Applications)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseApps"
-                aria-expanded="false"
-                aria-controls="collapseApps"
-              >
-                <div class="nav-link-icon"><i data-feather="globe"></i></div>
-                Applications
+                <div class="nav-link-icon d-flex align-items-end gap-2">
+                  <span class="material-icons-round text-habahaba-300">
+                    bar_chart
+                  </span>
+                  <span class="text-white">Statistics</span>
+                </div>
                 <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
+                  <span class="material-icons-round text-white">
+                    navigate_next
+                  </span>
                 </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseApps"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav
-                  class="sidenav-menu-nested nav accordion"
-                  id="accordionSidenavAppsMenu"
-                >
-                  <!-- Nested Sidenav Accordion (Apps -> Knowledge Base)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#appsCollapseKnowledgeBase"
-                    aria-expanded="false"
-                    aria-controls="appsCollapseKnowledgeBase"
-                  >
-                    Knowledge Base
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="appsCollapseKnowledgeBase"
-                    data-bs-parent="#accordionSidenavAppsMenu"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Home 1</a>
-                      <a class="nav-link" href="#">Home 2</a>
-                      <a class="nav-link" href="#">Category</a>
-                      <a class="nav-link" href="#">Article</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Apps -> User Management)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#appsCollapseUserManagement"
-                    aria-expanded="false"
-                    aria-controls="appsCollapseUserManagement"
-                  >
-                    User Management
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="appsCollapseUserManagement"
-                    data-bs-parent="#accordionSidenavAppsMenu"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Users List</a>
-                      <a class="nav-link" href="#">Edit User</a>
-                      <a class="nav-link" href="#">Add User</a>
-                      <a class="nav-link" href="#">Groups List</a>
-                      <a class="nav-link" href="#">Organization Details</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Apps -> Posts Management)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#appsCollapsePostsManagement"
-                    aria-expanded="false"
-                    aria-controls="appsCollapsePostsManagement"
-                  >
-                    Posts Management
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="appsCollapsePostsManagement"
-                    data-bs-parent="#accordionSidenavAppsMenu"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Posts List</a>
-                      <a class="nav-link" href="#">Create Post</a>
-                      <a class="nav-link" href="#">Edit Post</a>
-                      <a class="nav-link" href="#">Posts Admin</a>
-                    </nav>
-                  </div>
-                </nav>
               </div>
-              <!-- Sidenav Accordion (Flows)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseFlows"
-                aria-expanded="false"
-                aria-controls="collapseFlows"
+              <div
+                type="button"
+                class="btn dropdown d-flex justify-content-between"
               >
-                <div class="nav-link-icon"><i data-feather="repeat"></i></div>
-                Flows
+                <div class="nav-link-icon d-flex align-items-end gap-2">
+                  <span class="material-icons-round text-habahaba-300">
+                    wallet
+                  </span>
+                  <span class="text-white">Transactions</span>
+                </div>
                 <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
+                  <span class="material-icons-round text-white">
+                    navigate_next
+                  </span>
                 </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseFlows"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav class="sidenav-menu-nested nav">
-                  <a class="nav-link" href="#">Multi-Tenant Registration</a>
-                  <a class="nav-link" href="#">Wizard</a>
-                </nav>
               </div>
-              <!-- Sidenav Heading (UI Toolkit)-->
-              <div class="sidenav-menu-heading">UI Toolkit</div>
-              <!-- Sidenav Accordion (Layout)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseLayouts"
-                aria-expanded="false"
-                aria-controls="collapseLayouts"
+              <div
+                type="button"
+                class="btn dropdown d-flex justify-content-between"
               >
-                <div class="nav-link-icon"><i data-feather="layout"></i></div>
-                Layout
+                <div class="nav-link-icon d-flex align-items-end gap-2">
+                  <span class="material-icons-round rotate text-habahaba-300"> link </span>
+                  <span class="text-white">Affiliate Links</span>
+                </div>
                 <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
+<!--                  <span class="material-icons-round text-white">-->
+<!--                    navigate_next-->
+<!--                  </span>-->
                 </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseLayouts"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav
-                  class="sidenav-menu-nested nav accordion"
-                  id="accordionSidenavLayout"
-                >
-                  <!-- Nested Sidenav Accordion (Layout -> Navigation)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseLayoutSidenavVariations"
-                    aria-expanded="false"
-                    aria-controls="collapseLayoutSidenavVariations"
-                  >
-                    Navigation
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="collapseLayoutSidenavVariations"
-                    data-bs-parent="#accordionSidenavLayout"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Static Sidenav</a>
-                      <a class="nav-link" href="#">Dark Sidenav</a>
-                      <a class="nav-link" href="#">RTL Layout</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Layout -> Container Options)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseLayoutContainers"
-                    aria-expanded="false"
-                    aria-controls="collapseLayoutContainers"
-                  >
-                    Container Options
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="collapseLayoutContainers"
-                    data-bs-parent="#accordionSidenavLayout"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Boxed Layout</a>
-                      <a class="nav-link" href="#">Fluid Layout</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Layout -> Page Headers)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseLayoutsPageHeaders"
-                    aria-expanded="false"
-                    aria-controls="collapseLayoutsPageHeaders"
-                  >
-                    Page Headers
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="collapseLayoutsPageHeaders"
-                    data-bs-parent="#accordionSidenavLayout"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Simplified</a>
-                      <a class="nav-link" href="#">Compact</a>
-                      <a class="nav-link" href="#">Content Overlap</a>
-                      <a class="nav-link" href="#">Breadcrumbs</a>
-                      <a class="nav-link" href="#">Light</a>
-                    </nav>
-                  </div>
-                  <!-- Nested Sidenav Accordion (Layout -> Starter Layouts)-->
-                  <a
-                    class="nav-link collapsed"
-                    href="javascript:void(0);"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseLayoutsStarterTemplates"
-                    aria-expanded="false"
-                    aria-controls="collapseLayoutsStarterTemplates"
-                  >
-                    Starter Layouts
-                    <div class="sidenav-collapse-arrow">
-                      <i class="fas fa-angle-down"></i>
-                    </div>
-                  </a>
-                  <div
-                    class="collapse"
-                    id="collapseLayoutsStarterTemplates"
-                    data-bs-parent="#accordionSidenavLayout"
-                  >
-                    <nav class="sidenav-menu-nested nav">
-                      <a class="nav-link" href="#">Default</a>
-                      <a class="nav-link" href="#">Minimal</a>
-                    </nav>
-                  </div>
-                </nav>
               </div>
-              <!-- Sidenav Accordion (Components)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseComponents"
-                aria-expanded="false"
-                aria-controls="collapseComponents"
-              >
-                <div class="nav-link-icon"><i data-feather="package"></i></div>
-                Components
-                <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
-                </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseComponents"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav class="sidenav-menu-nested nav">
-                  <a class="nav-link" href="#">Alerts</a>
-                  <a class="nav-link" href="#">Avatars</a>
-                  <a class="nav-link" href="#">Badges</a>
-                  <a class="nav-link" href="#">Buttons</a>
-                  <a class="nav-link" href="#">
-                    Cards
-                    <span class="badge bg-primary-soft text-primary ms-auto"
-                      >Updated</span
-                    >
-                  </a>
-                  <a class="nav-link" href="#">Dropdowns</a>
-                  <a class="nav-link" href="#">
-                    Forms
-                    <span class="badge bg-primary-soft text-primary ms-auto"
-                      >Updated</span
-                    >
-                  </a>
-                  <a class="nav-link" href="#">Modals</a>
-                  <a class="nav-link" href="#">Navigation</a>
-                  <a class="nav-link" href="#">Progress</a>
-                  <a class="nav-link" href="#">Step</a>
-                  <a class="nav-link" href="#">Timeline</a>
-                  <a class="nav-link" href="#">Toasts</a>
-                  <a class="nav-link" href="#">Tooltips</a>
-                </nav>
-              </div>
-              <!-- Sidenav Accordion (Utilities)-->
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseUtilities"
-                aria-expanded="false"
-                aria-controls="collapseUtilities"
-              >
-                <div class="nav-link-icon"><i data-feather="tool"></i></div>
-                Utilities
-                <div class="sidenav-collapse-arrow">
-                  <i class="fas fa-angle-down"></i>
-                </div>
-              </a>
-              <div
-                class="collapse"
-                id="collapseUtilities"
-                data-bs-parent="#accordionSidenav"
-              >
-                <nav class="sidenav-menu-nested nav">
-                  <a class="nav-link" href="#">Animations</a>
-                  <a class="nav-link" href="#">Background</a>
-                  <a class="nav-link" href="#">Borders</a>
-                  <a class="nav-link" href="#">Lift</a>
-                  <a class="nav-link" href="#">Shadows</a>
-                  <a class="nav-link" href="#">Typography</a>
-                </nav>
-              </div>
-              <!-- Sidenav Heading (Addons)-->
-              <div class="sidenav-menu-heading">Plugins</div>
-              <!-- Sidenav Link (Charts)-->
-              <a class="nav-link" href="#">
-                <div class="nav-link-icon">
-                  <i data-feather="bar-chart"></i>
-                </div>
-                Charts
-              </a>
-              <!-- Sidenav Link (Tables)-->
-              <a class="nav-link" href="#">
-                <div class="nav-link-icon"><i data-feather="filter"></i></div>
-                Tables
-              </a>
             </div>
           </div>
           <!-- Sidenav Footer-->
-          <div class="sidenav-footer">
-            <div class="sidenav-footer-content">
-              <div class="sidenav-footer-subtitle">Logged in as:</div>
-              <div class="sidenav-footer-title">Valerie Luna</div>
+          <div class="bg-habahaba-200 rounded m-2 py-3">
+            <div
+              type="button"
+              class="btn dropdown d-flex justify-content-between"
+            >
+              <div class="nav-link-icon d-flex align-items-center gap-2">
+                <img
+                  class="img-fluid w-25 rounded-circle"
+                  src="../../public/illustrations/profiles/profile-1.png"
+                />
+                <span style="font-size: 14px">Valeria Luna</span>
+              </div>
             </div>
+
           </div>
         </nav>
       </div>
@@ -846,7 +358,7 @@ const generateLink = ()=>{
               <span class="text-nowrap">generate link</span>
             </div>
             <div
-             v-if="showSpinner"
+              v-if="showSpinner"
               class="d-flex align-items-center gap-2 btn btn-habahaba-100 rounded-pill"
               disabled
             >
@@ -858,7 +370,8 @@ const generateLink = ()=>{
 
             <div
               v-if="showCopyLink"
-              class="btn btn-habahaba-500 d-flex gap-2 rounded-pill">
+              class="btn btn-habahaba-500 d-flex gap-2 rounded-pill"
+            >
               <span class="material-icons-outlined fs-6"> content_copy </span>
               <span>copy</span>
             </div>

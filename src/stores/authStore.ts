@@ -140,6 +140,7 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     getUserInfo,
     userIsLoggedIn,
     getToken,
-    getIsLoggedIn
+    getIsLoggedIn,
+    token
   }
 })
