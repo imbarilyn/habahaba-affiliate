@@ -138,7 +138,7 @@ console.log(dashboardData.value)
             <div class="bg-habahaba-300"></div>
           </div>
           <div class="d-flex flex-column">
-            <span>Valeria Luna</span>
+            <span>{{authStore.getUserInfo()?.username as string}}</span>
             <span class="fs-6 fw-light">Hello, feels good to be back!</span>
           </div>
         </div>
