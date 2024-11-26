@@ -306,10 +306,10 @@ const isAlertBannerVisible = ref({
 })
 
 // generic type
-type ApiResponse<Result> = {
-  message: string
-  result: Result
-}
+// type ApiResponse<Result> = {
+//   message: string
+//   result: Result
+// }
 const isLoading = ref(false)
 const handleSubmit = () => {
   isLoading.value = true
