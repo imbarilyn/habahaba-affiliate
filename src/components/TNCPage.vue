@@ -37,7 +37,7 @@ const isTermsAccepted = (value: boolean)=>{
 </script>
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white text-responsive">
     <div
       class="w-100 text-white bg-habahaba-500 fixed-center d-flex flex-column align-content-center justify-content-center"
     >
