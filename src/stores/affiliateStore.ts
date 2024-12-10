@@ -1,46 +1,54 @@
-import { defineStore }  from 'pinia'
-import { ref } from 'vue'
-import { useAuthStore} from '@/stores/authStore'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
+interface AffiliateUserPayload {
+  phone_no: string,
+  code: string
+}
 
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string
 
-export const useAffiliateStore =  defineStore('useAffiliateStore', ()=>{
-  const openDialog = ref({
-    isOpen: false,
+export const useAffiliateStore = defineStore('useAffiliateStore', () => {
+  const openCreateLinkDialog = ref({
+    isOpen: false
   })
+  const appIsFetching = ref<boolean>(false)
+  const isTncAccepted = ref(false)
+  const getIsTncAccepted = computed(() => isTncAccepted.value)
 
 
-
-
-
-  const setOpenAffiliateDialog = (value: boolean)=>{
+  const setAppIsFetching = (value: boolean) => {
+    appIsFetching.value = value
+  }
+  const setOpenAffiliateDialog = (value: boolean) => {
     console.log(value)
-    openDialog.value.isOpen = value
+    openCreateLinkDialog.value.isOpen = value
+  }
+
+  const setTncAccepted = (value: boolean) => {
+    isTncAccepted.value = value
   }
 
 
-
-
-  async function getAffiliateLink (){
+  async function getAffiliateLink() {
     const authStore = useAuthStore()
     console.log(authStore.token)
-    try{
+    try {
       const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `${authStore.token}`
         },
-        mode: 'cors',
+        mode: 'cors'
       })
       const resp = await response.json()
-      if(resp.result === 'ok'){
-        console.log('Affiliate link form store',resp)
+      if (resp.result === 'ok') {
+        console.log('Affiliate link form store', resp)
         return resp
-      }
-      else{
+      } else {
         console.log('error occurred')
         return
       }
@@ -136,13 +144,25 @@ export const useAffiliateStore =  defineStore('useAffiliateStore', ()=>{
     }
     catch(error){
       console.log(error)
+      return {
+        result: false,
+        data: null
+      }
     }
   }
 
 
   return {
-    openDialog,
+    openCreateLinkDialog,
     setOpenAffiliateDialog,
-    getAffiliateLink
+    getAffiliateLink,
+    validateAffiliateLink,
+    affiliateUserPhone,
+    getDashboardData,
+    setTncAccepted,
+    getIsTncAccepted,
+    getStatistics,
+    appIsFetching,
+    setAppIsFetching
   }
 })
