@@ -333,7 +333,45 @@ const lineData: Ref = ref({
 
 <template>
   <div>
-    <canvas ref="refLineGraph" width="300px" height="300px"></canvas>
+    <div v-if="isChartDisplay">
+      <canvas ref="refLineGraph" width="300px" height="300px"></canvas>
+    </div>
+    <div v-else>
+      <div
+        class="d-flex justify-content-center align-items-center"
+        style="height: 300px"
+      >
+        <div class="d-flex flex-column align-items-center">
+          <img
+            :src="image"
+            :alt="`${props.activeTab.label} image`"
+            style="width: 150px"
+          />
+          <span v-if="isZeroValues && props.activeTab.label === 'Clicks'" class="text-gray-600 w-75 text-sm text-center"
+          >You have no click count yet. Please generate affiliate link and share
+          with your community to increase click count</span
+          >
+          <span v-if="isZeroValues && props.activeTab.label === 'Community'" class="text-gray-600 w-75 text-sm text-center"
+          >You have no community count yet. Please generate affiliate link, share
+          and ask your community to create Habahaba account</span
+          >
+          <span v-if="isZeroValues && props.activeTab.label === 'Deposits' || props.activeTab.label === 'Earning'" class="text-gray-600 w-75 text-sm text-center"
+          >You have no deposits yet for your community. Please ask your community to activate their Habahaba account.       </span
+          >
+<!--          <span v-if="isZeroValues && props.activeTab.label === 'Earning'" class="text-gray-600 w-75 text-sm text-center"-->
+<!--          >You have no click count yet. Please generate affiliate link and share-->
+<!--          with your community to increase click count</span-->
+<!--          >-->
+          <span
+            v-if="isErrorFetchingData"
+            class="text-gray-600 w-75 text-sm text-center"
+          >Opps! No relevant data. Please try again</span
+          >
+        </div>
+
+
+      </div>
+    </div>
   </div>
 </template>
 
