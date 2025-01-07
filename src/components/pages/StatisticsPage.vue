@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import StatsLineGraph from '@/components/charts/StatsLineGraph.vue'
-import Breadcrumbs from '@/components/Breadcrumbs.vue'
 import BarChart from '@/components/charts/BarChart.vue'
 import PieChart from '@/components/charts/PieChart.vue'
+import CommunityAnalytics from '@/components/CommunityAnalytics.vue'
 </script>
 
 <template>
@@ -12,8 +12,8 @@ import PieChart from '@/components/charts/PieChart.vue'
       <div class="row gap-4">
         <div class="col-lg-8 col-12 smooth-rounded bg-white py-2">
           <p class="fs-5">Community Analytics</p>
-          <Breadcrumbs />
-          <StatsLineGraph />
+          <CommunityAnalytics />
+
         </div>
         <div class="col-lg smooth-rounded linear-bg text-white p-3">
           <div>
