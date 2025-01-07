@@ -72,7 +72,63 @@ const generateLink = () => {
     })
 }
 
-const route = useRoute()
+const handelCloseModal = (value: boolean) => {
+  console.log(value)
+  affiliateStore.setOpenAffiliateDialog(value)
+}
+
+const isLinkCopied = ref(false)
+const copyAffiliateLink = () => {
+  if (!navigator.clipboard) {
+    alert('Your browser does not support clipboard')
+  } else {
+    isLinkCopied.value = true
+    navigator.clipboard.writeText(affiliateLink.value)
+  }
+}
+
+// create affiliate link
+const createLink= ()=>{
+  affiliateStore.setOpenAffiliateDialog(true)
+  tabStore.setActiveTab('createLink')
+}
+
+const logOut = ()=>{
+  // alert('Logging out')
+  authStore.logout()
+  router.push({name: 'user-login'})
+}
+
+const handleStatistic = ()=>{
+  if(tabStore.activeTab === 'statistics') return
+  tabStore.setActiveTab('statistics')
+  affiliateStore.setAppIsFetching(true)
+  setTimeout(async () =>{
+    affiliateStore.setAppIsFetching(false)
+    await router.push({name: 'statistics'})
+    // alert('Hello done!!')
+  }, 1000)
+}
+
+const handleOverview = ()=>{
+  if(tabStore.activeTab === 'overview') return
+  tabStore.setActiveTab('overview')
+  affiliateStore.setAppIsFetching(true)
+  setTimeout(async ()=>{
+    affiliateStore.setAppIsFetching(false)
+    await router.push({name: 'overview'})
+  }, 1000)
+}
+
+const handleTransaction = ()=>{
+  if(tabStore.activeTab === 'transactions') return
+  tabStore.setActiveTab('transactions')
+  affiliateStore.setAppIsFetching(true)
+  setTimeout(async()=>{
+    affiliateStore.appIsFetching =false
+    await router.push({name: 'transactions'})
+  }, 1000)
+}
 </script>
 
 <template>

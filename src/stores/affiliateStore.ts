@@ -57,23 +57,23 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
     }
   }
 
-  async function validateAffiliateLink(affiliateCode: string) {
-    try {
-      const response = await fetch(`${BASE_URL}/affiliate/validate-link/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        mode: 'cors',
-        body: JSON.stringify({
-          code: affiliateCode
+    async function validateAffiliateLink(affiliateCode: string) {
+      try {
+        const response = await fetch(`${BASE_URL}/affiliate/validate-link/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify({
+            code: affiliateCode
+          })
         })
-      })
-      return await response.json()
-    } catch (error) {
-      console.log(error)
+        return await response.json()
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
 
   async function affiliateUserPhone(affiliateUserPayload: AffiliateUserPayload) {
     console.log(affiliateUserPayload)
