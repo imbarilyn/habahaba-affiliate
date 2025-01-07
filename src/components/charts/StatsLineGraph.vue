@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { onMounted, type Ref, ref } from 'vue'
+import { nextTick, onMounted, type Ref, ref, watch } from 'vue'
 import { Chart } from 'chart.js/auto'
+import type { Period, Tab } from '@/components/CommunityAnalytics.vue'
+import { useAffiliateStore, useNotificationsStore } from '@/stores'
+import { showAlert } from '@/modules/popup'
 
+const affiliateStore = useAffiliateStore()
+const notificationStore = useNotificationsStore()
 const refLineGraph: Ref<HTMLCanvasElement | null> = ref(null)
 const lineGraphInstance: Ref<Chart<'line', number[], string> | null> = ref(null)
 
@@ -34,6 +39,36 @@ const generateLabels = (selectedPeriod: Period) => {
   }
 }
 
+const data = ref<number[]>()
+
+const lineData: Ref = ref({
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+  // labels: [] as string[],
+  datasets: [
+    {
+      label: 'Community Savings',
+      data: [4, 5, 1, 10, 32, 2, 12],
+      // data: [] as number[],
+      fill: true,
+      backgroundColor: 'rgba(  250, 190, 119, 0.75)',
+      // backgroundColor: 'rgba(122, 49, 20, 0.75)',
+      tension: 0.4,
+      borderWidth: 1,
+      // borderColor: 'rgba(  250, 190, 119, 0.75)'
+      // 250, 190, 119
+      // 254, 238, 214,
+    },
+    // {
+    //   label: 'Affiliate Earning',
+    //   data: [12, 3, 24, 7, 6, 1],
+    //   fill: true,
+    //   backgroundColor: 'rgba(122, 49, 20, 0.75)',
+    //   tension: 0.4,
+    //   borderWidth: 1,
+    //   // borderColor: 'rgba(122, 49, 20, 0.75)'
+    // },
+  ],
+})
 const renderChart = () => {
   if (refLineGraph.value) {
     lineGraphInstance.value = new Chart(refLineGraph.value, {
