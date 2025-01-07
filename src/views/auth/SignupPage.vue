@@ -359,26 +359,26 @@ const closeAlert = () => {
 </script>
 
 <template>
-  <div class="container py-md-0 py-4" style="min-height: 100vh">
-    <div class="row">
+  <div class=" d-flex justify-content-center py-md-0 py-4" style="min-height: 100vh">
+    <div class="row  w-100 d-flex justify-content-center align-content-center" style="min-height: 100vh">
       <div
-        class="col-md-6 col-12 d-flex align-items-center justify-content-md-start justify-content-center pt-4"
+        class="col-md-6 col-12 d-flex align-items-center  justify-content-center justify-content-start"
       >
         <div class="">
           <img
-            src="../../../public/images/referrer-register.png"
+            src="/images/referrer-register.png"
             class="width-size"
           />
         </div>
       </div>
       <div class="col-sm-12 col-md-6 d-flex justify-content-center">
-        <div class="col col-lg-10">
+        <div class="col col-lg-10 col-xl-8 col-10 col-md-12">
           <!-- Basic registration form-->
           <div class="card shadow border-0 rounded-lg mt-5 shadow px-4">
             <div class="d-flex flex-column justify-content-center pt-2">
               <div class="d-flex justify-content-center pb-2">
                 <img
-                  src="../../../public/images/habahaba-logo.png"
+                  src="/images/habahaba-logo.png"
                   alt="habahaba-logo"
                   class="w-25"
                 />
@@ -395,8 +395,8 @@ const closeAlert = () => {
                 <!-- Form Row-->
 
                 <!-- Form Group (first name)-->
-                <div class="d-flex gap-4 mb-md-3">
-                  <div class="">
+                <div class="row gap-2 mb-md-3">
+                  <div class="col">
                     <label class="small mb-1" for="inputFirstName"
                       >First Name</label
                     >
@@ -420,7 +420,7 @@ const closeAlert = () => {
                   </div>
 
                   <!-- Form Group (last name)-->
-                  <div class="">
+                  <div class="col">
                     <label class="small mb-1" for="inputLastName"
                       >Last Name</label
                     >
@@ -516,10 +516,8 @@ const closeAlert = () => {
                 <!-- Form Row    -->
 
                 <!-- Form Group (password)-->
-                <div
-                  class="d-flex flex-md-row gap-md-4 gap-2 mb-md-4 mb-2 flex-column"
-                >
-                  <div class="mb-1.5">
+                <div class="row gap-2 mb-md-3">
+                  <div class="col mb-1.5">
                     <label class="small mb-1" for="inputPassword"
                       >Password</label
                     >
@@ -543,7 +541,7 @@ const closeAlert = () => {
                   </div>
 
                   <!-- Form Group (confirm password)-->
-                  <div class="">
+                  <div class="col">
                     <label class="small mb-1" for="inputConfirmPassword"
                       >Confirm Password</label
                     >
@@ -570,7 +568,7 @@ const closeAlert = () => {
                     >
                   </div>
                 </div>
-                <div style="font-size: 15px">
+                <div style="font-size: 15px" class="mt-2">
                   <input type="checkbox" v-model="affiliatePayload.tnc" />
                   <span class="px-1">I've read and accepted the</span>
                   <RouterLink
@@ -588,7 +586,7 @@ const closeAlert = () => {
                   <div class="small">
                     <span>Have an account?</span>
                     <RouterLink
-                      to="/login"
+                      to="/auth/login"
                       class="text-decoration-none text-habahaba-500"
                     >
                       Go to login
@@ -598,7 +596,7 @@ const closeAlert = () => {
 
                 <!-- Form Group (create account submit)-->
                 <button
-                  class="btn btn-habahaba-500 btn-block col-12 pe-1"
+                  class="btn btn-habahaba-500 btn-block col-12 mb-4"
                   type="submit"
                 >
                   <span v-if="!isLoading" class="text-white"
@@ -612,25 +610,6 @@ const closeAlert = () => {
                     <span class="visually-hidden">Loading...</span>
                   </span>
                 </button>
-                <!--                      <div class="d-flex justify-content-center">-->
-                <!--                        <hr class="col-5" />-->
-                <!--                        <span class="align-content-center px-2">Or</span>-->
-                <!--                        <hr class="col-6" />-->
-                <!--                      </div>-->
-                <!--                      <div-->
-                <!--                        class="d-flex flex-row bg-primary rounded border border-primary border-2"-->
-                <!--                      >-->
-                <!--                        <div class="bg-white rounded-start">-->
-                <!--                          <img-->
-                <!--                            src="../../../public/images/googleicon.png"-->
-                <!--                            style="width: 40px"-->
-                <!--                            class=""-->
-                <!--                          />-->
-                <!--                        </div>-->
-                <!--                        <div class="align-content-center mx-auto">-->
-                <!--                          <span class="text-white">Sign up with google</span>-->
-                <!--                        </div>-->
-                <!--                      </div>-->
               </form>
             </div>
           </div>
