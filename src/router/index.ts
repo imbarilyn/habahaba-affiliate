@@ -1,5 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory,  type RouteLocationNormalized} from 'vue-router'
 import { computed } from 'vue'
+import { useAuthStore } from '@/stores'
+
 
 const routes = [
   {
@@ -19,27 +21,73 @@ const routes = [
       },
       {
         name: 'user-login',
-        path: '/login',
-        component: ()=>import('../views/auth/LoginPage.vue')
-      }
-    ]
+        path: 'login',
+        component: ()=>import('../views/auth/LoginPage.vue'),
+        // component: ()=>import('../views/auth/ReferralRegister.vue'),
+      },
+    ],
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     name: 'dashboard',
     path: '/dashboard',
     component: ()=>import('../views/Dashboard.vue'),
+    redirect: {name: 'overview'},
     children: [
       {
         name: 'overview',
         path: '',
         component: ()=>import('../components/pages/OverviewPage.vue')
+      },
+      {
+        name: 'statistics',
+        path: 'statistics',
+        component: ()=>import('../components/pages/StatisticsPage.vue')
+      },
+      {
+        name: 'transactions',
+        path: 'transactions',
+        component: ()=>import('../components/pages/TransactionsPage.vue')
       }
-    ]
+    ],
+    meta: {
+      requiresAuth: true
+    }
+  },
+
+  {
+    name: 'ReferralRegister',
+    path: '/referral-register',
+    component: ()=>import('../views/auth/ReferralRegister.vue'),
+    props: (route: RouteLocationNormalized)=>{
+      const { query } = route
+      return {
+        referrer: query.referrer
+      }
+    },
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     name: 'tncs',
     path: '/term-and-conditions',
-    component: ()=>import('../components/TNCPage.vue')
+    component: ()=>import('../components/TNCPage.vue'),
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    name: 'not-found',
+    path: '/:pathMatch(.*)*',
+    component: ()=>import('../views/NotFoundPage.vue'),
+    meta: {
+      requiresAuth: false
+    }
+
+
   }
 ]
 
@@ -48,16 +96,31 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next)=>{
-//   const excludedRoutes = [
-//     'user-signup',
-//     'dashboard'
-//   ] as string[]
+router.beforeEach((to, from, next)=>{
+  const authStore = useAuthStore()
+  const requiresAuth = to.meta.requiresAuth as boolean
+  // const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  // const isExcludedRoute = computed(()=> excludedRoutes.includes(to.name as string))
+  console.log(authStore.userIsLoggedIn)
+  if(!requiresAuth){
+    console.log(requiresAuth)
+    console.log('no auth required')
+    next()
+  }
+  else{
+    if(!authStore.userIsLoggedIn){
+      console.log('not logged in')
+      console.log(authStore.userIsLoggedIn)
+      next({
+        name: 'user-login'
+      })
+    }
+    else{
+      console.log('logged in')
+      next()
+    }
 
-// })
-
-
+  }
+})
 
 export default router

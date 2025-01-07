@@ -255,7 +255,7 @@
     --bs-font-sans-serif: "Metropolis", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    --bs-body-font-family: 'Poppins Extrabold', 'SF Pro Regular', sans-serif, serif,  Ubuntu;
+    --bs-body-font-family: 'SF Pro Regular','Poppins Extrabold', sans-serif, serif,  Ubuntu;
     --bs-body-font-size: 1rem;
     --bs-body-font-weight: 400;
     --bs-body-line-height: 1.5;
@@ -18797,34 +18797,39 @@ body {
     color: #212832;
 }
 .sidenav-light .sidenav-menu .sidenav-menu-heading {
-    color: #a7aeb8;
+    color: #fff;
 }
 .sidenav-light .sidenav-menu .nav-link {
-    color: #212832;
+    color: #fff;
 }
+/*.sidenav-light .sidenav-menu .nav-link {}*/
 .sidenav-light .sidenav-menu .nav-link .nav-link-icon {
-    color: #a7aeb8;
+    color: #fff;
 }
 .sidenav-light .sidenav-menu .nav-link .sidenav-collapse-arrow {
-    color: #a7aeb8;
+    color: #fabe77;
 }
 .sidenav-light .sidenav-menu .nav-link:hover {
-    color: #0061f2;
+    color: #fabe77;
 }
 .sidenav-light .sidenav-menu .nav-link.active {
-    color: #0061f2;
+    color: #fabe77;
 }
 .sidenav-light .sidenav-menu .nav-link.active .nav-link-icon {
-    color: #0061f2;
+    color: #fabe77;
 }
 .sidenav-light .sidenav-menu-nested {
     border-left-color: #d4dae3;
 }
 .sidenav-light .sidenav-footer {
-    background-color: rgba(33, 40, 50, 0.05);
+    background-color:  #fabe77;
+    border-radius: 20px;
 }
 .sidenav-light .sidenav-footer .sidenav-footer-subtitle {
     color: #69707a;
+}
+.rotate {
+    transform: rotate(-45deg);
 }
 
 .page-header .page-header-content {
@@ -19759,4 +19764,66 @@ pre[class*=language-] {
 
 .token.variable {
     color: #ff6666;
+
 }
+
+.smooth-rounded {
+    border-radius: 20px;
+}
+
+/* Default font size for larger screens */
+.text-responsive {
+    font-size: 16px; /* Adjust as needed */
+}
+
+/* Smaller font size for small devices */
+@media (max-width: 576px) {
+    .text-responsive {
+        font-size: 16px; /* Adjust for small devices */
+    }
+}
+@media (min-width: 768px){
+    .text-responsive {
+        font-size: 20px
+    }
+}
+
+.my-popup-class {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0.15rem 1.75rem  rgba(227, 214, 202, 0.15);
+}
+
+.my-title-class {
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.my-html-container-class{
+    color:red;
+    font-size: 0.9rem;
+
+}
+
+.my-cancel-button-class {
+    background-color: #f57e20;
+    color: #333;
+}
+
+.my-confirm-button-class {
+    border-radius: 4px;
+    background-color: #f57e20;
+    border: 0;
+    color: white;
+
+
+}
+
+.my-actions-class {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+

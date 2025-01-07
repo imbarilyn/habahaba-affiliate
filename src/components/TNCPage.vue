@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useAffiliateStore } from '@/stores'
-import { showAlert } from '@/modal'
+import { showAlert } from  '@/modules/popup'
 import { useStorage} from '@vueuse/core'
 
 const router = useRouter()
@@ -13,10 +13,12 @@ const isTermsAccepted = (value: boolean)=>{
   affiliateStore.setTncAccepted(value)
   if(value){
     showAlert({
-      title: 'Success',
-      text: 'Terms and Conditions accepted successfully',
-      icon: 'success',
-      timer: 1000
+      // title: 'Success',
+      // text: 'Terms and Conditions accepted successfully',
+      // icon: 'success',
+      // timer: 1000
+      type: 'success',
+      message: 'Terms and Conditions accepted successfully',
     })
     localStorage.setItem('isTermsAccepted', '{"accepted": true}')
     // useStorage('isTermsAccepted', {accepted: false, greeting: 'hello'}, localStorage, {mergeDefaults: true})
@@ -28,16 +30,18 @@ const isTermsAccepted = (value: boolean)=>{
   }
   else {
     showAlert({
-      title: 'Error',
-      text: 'You must accept the terms and conditions to proceed',
-      icon: 'error'
+      // title: 'Error',
+      // text: 'You must accept the terms and conditions to proceed',
+      // icon: 'error'
+      type: 'error',
+      message: 'You must accept the terms and conditions to proceed',
     })
   }
 }
 </script>
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white text-responsive">
     <div
       class="w-100 text-white bg-habahaba-500 fixed-center d-flex flex-column align-content-center justify-content-center"
     >
