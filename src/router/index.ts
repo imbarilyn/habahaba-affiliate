@@ -48,15 +48,29 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next)=>{
-//   const excludedRoutes = [
-//     'user-signup',
-//     'dashboard'
-//   ] as string[]
+router.beforeEach((to, from, next)=>{
+  const authStore = useAuthStore()
+  const requiresAuth = to.meta.requiresAuth as boolean
+  // const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
-  // const isExcludedRoute = computed(()=> excludedRoutes.includes(to.name as string))
-
-// })
+  console.log(authStore.userIsLoggedIn)
+  if(!requiresAuth){
+    console.log(requiresAuth)
+    console.log('no auth required')
+    next()
+  }
+  else{
+    if(!authStore.userIsLoggedIn){
+      console.log('not logged in')
+      console.log(authStore.userIsLoggedIn)
+      next({
+        name: 'user-login'
+      })
+    }
+    else{
+      console.log('logged in')
+      next()
+    }
 
 
 
