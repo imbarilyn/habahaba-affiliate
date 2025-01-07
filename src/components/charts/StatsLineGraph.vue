@@ -79,7 +79,7 @@ const renderChart = () => {
         maintainAspectRatio: false,
         plugins: {
           title: {
-            display: true,
+            display: false,
             text: 'Community Savings Vs Affiliate Earning',
           },
           // scales: {
@@ -346,34 +346,12 @@ watch(
 )
 onMounted(() => {
   lineGraphInstance.value?.destroy()
-  renderChart()
+  fetchCommunityAnalytics(props.selectedPeriod, props.activeTab)
+
 })
 
-const lineData: Ref = ref({
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-  datasets: [
-    {
-      label: 'Community Savings',
-      data: [4, 5, 1, 10, 32, 2, 12],
-      fill: true,
-      backgroundColor: 'rgba(  250, 190, 119, 0.75)',
-      tension: 0.4,
-      borderWidth: 1,
-      // borderColor: 'rgba(  250, 190, 119, 0.75)'
-      // 250, 190, 119
-      // 254, 238, 214,
-    },
-    {
-      label: 'Affiliate Earning',
-      data: [12, 3, 24, 7, 6, 1],
-      fill: true,
-      backgroundColor: 'rgba(122, 49, 20, 0.75)',
-      tension: 0.4,
-      borderWidth: 1,
-      // borderColor: 'rgba(122, 49, 20, 0.75)'
-    },
-  ],
-})
+
+
 </script>
 
 <template>
