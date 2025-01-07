@@ -96,11 +96,11 @@ const handleLogin = () => {
       .loginAffiliate(affiliatePayload)
       .then(resp => {
         console.log(resp)
-        isAlertBannerVisible.value =  {
-          visible: true,
-          message: 'An error occurred',
-          type: 'danger'
-        }
+        // isAlertBannerVisible.value =  {
+        //   visible: true,
+        //   message: 'An error occurred',
+        //   type: 'danger'
+        // }
         if (resp.result === 'ok') {
           router.push({
             name: 'dashboard',
@@ -158,28 +158,25 @@ onMounted(()=>{
   <div class="d-flex md-align-items-center " style="height: 100vh">
     <div class="row w-100">
       <div class="col-md col-12 d-flex justify-content-center align-items-center">
-        <div class="">
+        <div>
           <img
-            src="../../../public/images/referrer-register.png"
+            src="/images/referrer-register.png"
             class="width-size"
           />
         </div>
       </div>
-<!--      <div>-->
-<!--        <img src="../../../public/images/habahaba-logo.png" class="w-25">-->
-<!--      </div>-->
       <div class="col d-flex justify-content-center align-items-start align-items-md-center ms-4">
-        <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card shadow-lg border-0 rounded-lg p-4">
           <div class="justify-content-center pt-4">
             <div class="d-flex justify-content-center pb-3">
               <img
-                src="../../../public/images/habahaba-logo.png"
+                src="/images/habahaba-logo.png"
                 alt="habahaba-logo"
                 class="w-25"
               />
             </div>
             <h3 class="fw-light text-center">Welcome Back!</h3>
-            <p class="fw-light fs-6 text-center">
+            <p class="fw-light fs-6 text-center align-items-center justify-content-center">
               Hey! enter your details to login in to your account
             </p>
           </div>
@@ -261,13 +258,13 @@ onMounted(()=>{
         </div>
       </div>
     </div>
-    <Teleport to="body">
       <div v-if="isAlertBannerVisible.visible">
         <AlertBanner  :alert-type="isAlertBannerVisible.type" :alert-message="isAlertBannerVisible.message" @close-alert="closeAlert"/>
       </div>
-    </Teleport>
   </div>
 </template>
+
+
 
 <style scoped>
 .width-size {

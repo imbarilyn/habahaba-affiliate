@@ -1,181 +1,238 @@
 <script setup lang="ts">
-import { onMounted, type Ref, ref, watch } from 'vue'
+import { nextTick, onMounted, type Ref, ref, reactive } from 'vue'
 import { Chart } from 'chart.js/auto'
+import { useAffiliateStore } from '@/stores'
 
-
-// export interface DataInterface {
-//   labels: string[]
-//   datasets: {
-//     label: string
-//     data: number[]
-//     borderColor?: string
-//     backgroundColor: string
-//     tension: number
-//     fill: boolean
-//   }[]
-// }
-// const props = defineProps<{
-//   lineData: DataInterface
-//   lineOptions: Record<string, unknown>
-// }>()
-
-interface EachData {
+interface Earning {
   duration: string
   amount: number
 }
-interface LineGraphData {
-  userEarning: {
-    duration: string
-    amount: number
-  }
-  affiliateEarning: {
-    duration: string
-    amount: number
-  }
+
+interface LineData {
+  labels: string[]
+  datasets: [
+    {
+      label: string
+      data: number[]
+      fill: true
+      backgroundColor: string
+      tension: number
+      borderWidth: number
+    },
+  ]
 }
 
-const props = defineProps<{
-  lineGraphData: LineGraphData,
-  labels: string[]
-}>()
-
-
-
-console.log(props.lineGraphData)
-// const lineData: Ref = ref({
-//   labels: props.labels,
-//   datasets: [
-//     {
-//       label: 'Community Savings',
-//       data: [4,5,1,10,32,2,12],
-//       fill: true,
-//       backgroundColor: 'rgba(  250, 190, 119, 0.75)',
-//       tension: 0.4,
-//       borderWidth: 1
-//       // borderColor: 'rgba(  250, 190, 119, 0.75)'
-//       // 250, 190, 119
-//       // 254, 238, 214,
-//     },
-//     {
-//       label: 'Affiliate Earning',
-//       data: [12,3,24,7,6,1],
-//       fill: true,
-//       backgroundColor: 'rgba(122, 49, 20, 0.75)',
-//       tension: 0.4,
-//       borderWidth: 1
-//       // borderColor: 'rgba(122, 49, 20, 0.75)'
-//
-//     }
-//   ]
-// })
+const lineData = reactive({
+  labels: [] as string[],
+  datasets: [
+    {
+      label: 'Community Savings',
+      data: [] as number[],
+      fill: true,
+      backgroundColor: 'rgba(  250, 190, 119, 0.75)',
+      tension: 0.4,
+      borderWidth: 1,
+    },
+    {
+      label: 'Affiliate Earning',
+      data: [] as number[],
+      fill: true,
+      backgroundColor: 'rgba(122, 49, 20, 0.75)',
+      tension: 0.4,
+      borderWidth: 1,
+    },
+  ],
+})
 
 const lineOptions = {
   responsive: true,
   plugins: {
     title: {
       display: true,
-      text: 'Community Savings Vs Affiliate Earning'
+      text: 'Community Savings Vs Affiliate Earning',
     },
     scales: {
       x: {
         display: true,
-        text: 'Duration'
+        text: 'Duration',
       },
       y: {
         display: true,
-        text: 'Amount in Ksh'
-      }
-    }
-  }
+        text: 'Amount in Ksh',
+      },
+    },
+  },
 }
-
-// const setGradient = (canvas: HTMLCanvasElement, color: string)=>{
-//   // get the rendering context which is a 2D context which acn also be webgl, webgl2, webgpu or bitmaprenderer if it does not exist it returns null
-//   const ctx = canvas.getContext('2d')
-//   if(ctx){
-//     const gradient = ctx.createLinearGradient(0, 0, 0, 400)
-//     gradient.addColorStop(0, color)
-//     gradient.addColorStop(0.5, color)
-//     gradient.addColorStop(1, 'rgba(255, 0, 0, 0)')
-//     console.log(gradient)
-//     return gradient as unknown as string
-//   }
-//   return color
-// }
 const refLineGraph = ref<null | HTMLCanvasElement>(null)
-const  lineGraphInstance: Ref<Chart<'line', number[], string> | null >= ref(null)
+const lineGraphInstance: Ref<Chart<'line', number[], string> | null> = ref(null)
 
 const renderChart = async () => {
+  if (lineGraphInstance.value) {
+    lineGraphInstance.value.destroy()
+  }
+  console.log('chart-display', isChartDisplay.value)
+  console.log('zero-values', isZeroValues.value)
+  console.log('error', isErrorFetchingData.value)
+
   if (refLineGraph.value) {
-    const colors = ['rgba(  250, 190, 119, 0.75)', 'rgba(122, 49, 20, 0.75)']
-    // const amount = Object.values(props.lineGraphData).map((data) => data.amount)
-    // console.log(props.lineGraphData.affiliateEarning)
-    let amountUserEarning: number[] = []
-    let amountAffiliateEarning: number[] = []
-    Object.entries(props.lineGraphData).map(([key, data])=>{
-     if(key === 'userEarning') {
-       amountUserEarning = data.map((d:  EachData ) => d.amount)
-     }
-     else{
-       amountAffiliateEarning = data.map((d:  EachData ) => d.amount)
-     }
-    })
-    const lineData = {
-        labels: props.labels,
-        datasets: [
-          {
-            label: 'Community Savings',
-            data: amountUserEarning,
-            fill: true,
-            backgroundColor: colors[0],
-            tension: 0.4,
-            borderWidth: 1
-          },
-          {
-            label: 'Affiliate Earning',
-            data:  amountAffiliateEarning,
-            fill: true,
-            backgroundColor: colors[1],
-            tension: 0.4,
-            borderWidth: 1
-
-          }
-        ]
-      }
-      lineGraphInstance.value = new Chart(refLineGraph.value as HTMLCanvasElement, {
+    lineGraphInstance.value = new Chart(
+      refLineGraph.value as HTMLCanvasElement,
+      {
         type: 'line',
-        data: lineData,
-        options: lineOptions
-      })
-
+        data: lineData as LineData,
+        options: lineOptions,
+      },
+    )
   }
 }
 
-watch(
-  () => props.labels && props.lineGraphData,
-  value => {
-    if(value){
-      if (lineGraphInstance.value) {
-        lineGraphInstance.value.destroy();
-        renderChart()
-      }
-    }
-  },
-  {
-    deep: true
-  }
-)
+const affiliateStore = useAffiliateStore()
 
-onMounted(()  => {
-  console.log(props.lineGraphData)
-  renderChart()
+const selectLineChartTab = (tab: string) => {
+  if (selectedLineChartTab.value === tab) {
+    return
+  } else {
+    selectedLineChartTab.value = tab
+    handleChartData()
+  }
+}
+
+const isChartDisplay = ref(false)
+const isErrorFetchingData = ref(false)
+const isZeroValues = ref(false)
+
+const checkZeroValues = () => {
+  console.log('lineData', lineData)
+  const allZeros = lineData.datasets.every(dataset => {
+    return dataset.data.every((item: number) => item === 0)
+  })
+
+  console.log('allZeros', allZeros)
+  if (allZeros) {
+    isZeroValues.value = true
+    isChartDisplay.value = false
+  } else {
+    isZeroValues.value = false
+    isChartDisplay.value = true
+    nextTick(() => {
+      renderChart()
+    })
+  }
+  console.log('isZeros', isZeroValues.value)
+  console.log('isChartDisplay', isChartDisplay.value)
+  console.log('isErrorFetchingData', isErrorFetchingData.value)
+}
+
+const createChartLabel = (selectedTab: string) => {
+  switch (selectedTab) {
+    case 'daily':
+      lineData.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      break
+    case 'weekly':
+      lineData.labels = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4']
+      break
+    default:
+      lineData.labels = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ]
+      break
+  }
+}
+const handleChartData = () => {
+  affiliateStore
+    .getStatistics(selectedLineChartTab.value)
+    .then(resp => {
+      if (resp.data && lineData) {
+        lineData.datasets[0].data = []
+        lineData.datasets[1].data = []
+
+        resp.data.affiliateEarning.map((item: Partial<Earning>) => {
+          lineData?.datasets[0].data.push(item.amount as number)
+        })
+
+        resp.data.userEarning.forEach((item: Partial<Earning>) => {
+          lineData?.datasets[1].data.push(item.amount as number)
+        })
+        createChartLabel(selectedLineChartTab.value)
+        checkZeroValues()
+      } else {
+        isErrorFetchingData.value = true
+        isChartDisplay.value = false
+      }
+    })
+    .catch(error => {
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+    })
+}
+
+const lineChartTabs = ['daily', 'weekly', 'monthly'] as string[]
+const selectedLineChartTab: Ref<string> = ref('daily')
+
+onMounted(() => {
+  handleChartData()
 })
 </script>
 
 <template>
-  <div class="">
-    <canvas ref="refLineGraph" ></canvas>
+  <div>
+
+      <div class="d-flex  gap-1">
+        <div v-for="(tab, index) in lineChartTabs" :key="index" class="">
+          <span
+            class="btn rounded-pill"
+            :class="[
+              selectedLineChartTab === tab
+                ? 'btn btn-outline-habahaba-900 btn-transparent text-habahaba-900 btn-no-hover'
+                : ' btn-habahaba-900 text-white',
+            ]"
+            @click="selectLineChartTab(tab)"
+            >{{ tab }}</span
+          >
+        </div>
+      </div>
+    <div v-if="isChartDisplay">
+        <canvas ref="refLineGraph"></canvas>
+    </div>
+
+    <div v-else class="d-flex justify-content-center pb-5 align-items-center"
+    style="height: 300px">
+      <div class="d-flex flex-column align-items-center">
+        <img
+          src="/images/statistics-earning.png"
+          alt="community-photo"
+          style="width: 300px"
+          :class="[isErrorFetchingData? 'pt-md-5 pb-md-3 ': '']"
+        />
+        <span
+          v-if="isZeroValues"
+          class="text-gray-600 pt-md-4 pb-5 pb-md-0 w-75 text-sm text-center"
+        >
+          You have no earnings yet to compare. Please generate the affiliate link and share with your community to start earning
+        </span>
+        <span
+          v-if="isErrorFetchingData"
+          class="text-gray-600 pb-4 text-sm"
+          >Opps! No relevant data. Please try to refresh the page</span
+        >
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.btn-no-hover:hover {
+  background-color: inherit !important;
+}
+</style>
