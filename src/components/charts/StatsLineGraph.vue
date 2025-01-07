@@ -51,6 +51,254 @@ const renderChart = () => {
     })
   }
 }
+
+
+const isChartDisplay = ref(false)
+const isErrorFetchingData = ref(false)
+const isZeroValues = ref(false)
+const image = ref<string>('')
+
+const getClicks = (selectedPeriod: Period) => {
+  affiliateStore
+    .getClicks(selectedPeriod)
+    .then(response => {
+      if (response.data) {
+        for (let i = 0; i < response.data.length; i++) {
+          console.log(response.data[i].clickCount)
+          lineData.value.datasets[0].data?.push(response.data[i].clickCount)
+        }
+        if (
+          lineData.value.datasets[0].data.every(
+            (value: number) => value === (0 as number),
+          )
+        ) {
+          console.log('Checking for zeros')
+          isZeroValues.value = true
+          isChartDisplay.value = false
+          image.value = '/images/noClicks.png'
+        } else {
+          isZeroValues.value = false
+          generateLabels(selectedPeriod)
+          isChartDisplay.value = true
+          nextTick(() => {
+            renderChart()
+          })
+
+        }
+      } else {
+        console.log('No data available')
+        isErrorFetchingData.value = true
+        isChartDisplay.value = false
+        image.value = '/images/noClicks.png'
+        notificationStore.addNotification('No data available for now', 'error')
+      }
+    })
+    .catch(error => {
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+      image.value = '/images/noClicks.png'
+      notificationStore.addNotification(
+        'Unable to get data, please try again',
+        'error',
+      )
+    })
+}
+
+
+const getCommunity = (selectedPeriod: Period) => {
+  console.log('Getting Community data')
+  affiliateStore.getCommunity(selectedPeriod)
+    .then(response => {
+    if (response.data) {
+      console.log(response.data)
+      for (let i = 0; i < response.data.length; i++) {
+        console.log(response.data[i].userCount)
+        lineData.value.datasets[0].data?.push(response.data[i].userCount)
+      }
+      console.log(lineData.value)
+      if (
+        lineData.value.datasets[0].data.every(
+          (value: number) => value === (0 as number),
+        )
+      ) {
+        console.log('Checking for zeros')
+        isZeroValues.value = true
+        isChartDisplay.value = false
+        image.value = '/images/people.jpg'
+      } else {
+        isZeroValues.value = false
+        generateLabels(selectedPeriod)
+        isChartDisplay.value = true
+        nextTick(() => {
+          renderChart()
+        })
+      }
+    }else {
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+      image.value = '/images/people.png'
+      notificationStore.addNotification('No data available for now', 'error')
+
+    }
+  })
+    .catch((error)=>{{
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+      image.value = '/images/people.jpg'
+      notificationStore.addNotification('No data available for now', 'error')
+
+    }})
+}
+
+
+const getDeposits = (selectedPeriod: Period) => {
+  data.value = []
+  affiliateStore.getCommunityDeposits(selectedPeriod)
+    .then(response => {
+      if (response.data) {
+        // console.log('Community!!', response.data)
+        // response.data.map((deposit: Partial<Deposits>) => {
+        //   lineData.value.datasets[0].data?.push(deposit.depositAmount as number)
+        //   if (data.value?.every(value => value === 0)) {
+        //     isChartDisplay.value = false
+        //     isZeroValues.value = true
+        //     image.value = '/images/statistics-savings.png'
+        //   } else {
+        //     isChartDisplay.value = true
+        //     generateLabels(selectedPeriod)
+        //   }
+        // })
+        for (let i = 0; i < response.data.length; i++) {
+          lineData.value.datasets[0].data?.push(response.data[i].depositAmount)
+        }
+        console.log(lineData.value)
+        if (
+          lineData.value.datasets[0].data.every(
+            (value: number)=> value === (0 as number),
+          )
+        ) {
+          console.log('Checking for zeros')
+          isZeroValues.value = true
+          isChartDisplay.value = false
+          image.value = '/images/statistics-savings.png'
+        } else {
+          isZeroValues.value = false
+          generateLabels(selectedPeriod)
+          isChartDisplay.value = true
+          nextTick(() => {
+            renderChart()
+          })
+        }
+      }else {
+        isErrorFetchingData.value = true
+        isChartDisplay.value = false
+        image.value = '/images/statistics-savings.png'
+        notificationStore.addNotification('No data available for now', 'error')
+
+      }
+    })
+    .catch((error)=>{{
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+      image.value = '/images/statistics-savings.png'
+      notificationStore.addNotification('No data available for now', 'error')
+
+    }})
+}
+
+interface Earning {
+  EarningAmount: number
+  duration: string
+}
+const getEarnings = (selectedPeriod: Period) => {
+  data.value = []
+  affiliateStore.getCommunityEarnings(selectedPeriod)
+    .then(response => {
+      if (response.data) {
+        // console.log('Community!!', response.data)
+        // response.data.map((earning: Partial<Earning>) => {
+        //   lineData.value.datasets[0].data?.push(earning.EarningAmount as number)
+        //   if (data.value?.every(value => value === 0)) {
+        //     isChartDisplay.value = false
+        //     isZeroValues.value = true
+        //     image.value = '/images/statistics-earning.png'
+        //   } else {
+        //     isChartDisplay.value = true
+        //     generateLabels(selectedPeriod)
+        //   }
+        // })
+        for (let i = 0; i < response.data.length; i++) {
+          lineData.value.datasets[0].data?.push(response.data[i].earningAmount)
+        }
+        console.log(lineData.value)
+        if (
+          lineData.value.datasets[0].data.every(
+            (value: number)=> value === (0 as number),
+          )
+        ) {
+          console.log('Checking for zeros')
+          isZeroValues.value = true
+          isChartDisplay.value = false
+          image.value = '/images/statistics-earning.png'
+        } else {
+          isZeroValues.value = false
+          generateLabels(selectedPeriod)
+          isChartDisplay.value = true
+          nextTick(() => {
+            renderChart()
+          })
+        }
+      }else {
+        isErrorFetchingData.value = true
+        isChartDisplay.value = false
+        image.value = '/images/statistics-earning.png'
+        notificationStore.addNotification('No data available for now', 'error')
+
+      }
+    })
+    .catch((error)=>{{
+      isErrorFetchingData.value = true
+      isChartDisplay.value = false
+      image.value = '/images/statistics-earning.png'
+      notificationStore.addNotification('No data available for now', 'error')
+
+    }})
+}
+
+const fetchCommunityAnalytics = (selectedPeriod: Period, activeTab: Tab) => {
+  // lineGraphInstance.value?.destroy()
+  lineData.value.datasets[0].data = []
+  lineData.value.labels = []
+  isErrorFetchingData.value = false
+  isChartDisplay.value = false
+  image.value = ''
+  isZeroValues.value = false
+  if (selectedPeriod && activeTab) {
+    if (activeTab.label === 'Clicks') {
+      getClicks(selectedPeriod)
+    } else if (activeTab.label === 'Community') {
+      getCommunity(selectedPeriod)
+    } else if (activeTab.label === 'Deposits') {
+      getDeposits(selectedPeriod)
+    } else {
+      getEarnings(selectedPeriod)
+    }
+  }
+  return
+}
+watch(
+  () => props,
+  val => {
+    if (val) {
+      fetchCommunityAnalytics(val.selectedPeriod, val.activeTab)
+      lineGraphInstance.value?.destroy()
+      // renderChart()
+    }
+  },
+  {
+    deep: true,
+  },
+)
 onMounted(() => {
   lineGraphInstance.value?.destroy()
   renderChart()
