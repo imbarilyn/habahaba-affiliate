@@ -32,30 +32,30 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
   }
 
 
-  async function getAffiliateLink() {
-    const authStore = useAuthStore()
-    console.log(authStore.token)
-    try {
-      const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${authStore.token}`
-        },
-        mode: 'cors'
-      })
-      const resp = await response.json()
-      if (resp.result === 'ok') {
-        console.log('Affiliate link form store', resp)
-        return resp
-      } else {
-        console.log('error occurred')
-        return
+    async function getAffiliateLink() {
+      const authStore = useAuthStore()
+      console.log(authStore.token)
+      try {
+        const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${authStore.token}`
+          },
+          mode: 'cors'
+        })
+        const resp = await response.json()
+        if (resp.result === 'ok') {
+          console.log('Affiliate link form store', resp)
+          return resp
+        } else {
+          console.log('error occurred')
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
     }
-  }
 
     async function validateAffiliateLink(affiliateCode: string) {
       try {
