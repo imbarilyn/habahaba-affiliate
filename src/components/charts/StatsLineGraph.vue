@@ -4,24 +4,34 @@ import { Chart } from 'chart.js/auto'
 
 const refLineGraph: Ref<HTMLCanvasElement | null> = ref(null)
 const lineGraphInstance: Ref<Chart<'line', number[], string> | null> = ref(null)
-const lineOptions = {
-  responsive: true,
-  plugins: {
-    title: {
-      display: true,
-      text: 'Community Savings Vs Affiliate Earning',
-    },
-    scales: {
-      x: {
-        display: true,
-        text: 'Duration',
-      },
-      y: {
-        display: true,
-        text: 'Amount in Ksh',
-      },
-    },
-  },
+
+const props = defineProps<{
+  selectedPeriod: Period
+  activeTab: Tab
+}>()
+
+
+const generateLabels = (selectedPeriod: Period) => {
+  if (selectedPeriod.label === '7 days') {
+    lineData.value.labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  } else if (selectedPeriod.label === '30 days') {
+    lineData.value.labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+  } else {
+    lineData.value.labels = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
+  }
 }
 
 const renderChart = () => {
