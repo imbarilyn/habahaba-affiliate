@@ -477,6 +477,33 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
 
     }
 
+
+    async function getHighlights(){
+      const authStore = useAuthStore()
+      try {
+        const response = await fetch( `${BASE_URL}/affiliate/statistics/highlights`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${authStore.token}`
+          }
+        })
+        // return await response.json()
+        if(response.ok){
+          const resp = await response.json()
+          return {
+            data: {
+
+            }
+
+          }
+        }
+      }
+      catch(e){
+       console.error(e)
+      }
+    }
+
     return {
       openCreateLinkDialog,
       setOpenAffiliateDialog,
@@ -494,7 +521,8 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
       getCommunityDeposits,
       getCommunityEarnings,
       getGender,
-      getAge
+      getAge,
+      getHighlights
     }
   }
 )
