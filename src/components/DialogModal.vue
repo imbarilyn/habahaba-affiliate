@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { Modal } from 'bootstrap'
-import { onMounted, onBeforeUnmount } from 'vue'
-import { useAffiliateStore} from '@/stores'
+import { onMounted,  ref, type Ref } from 'vue'
 
-const affiliateStore = useAffiliateStore()
 const props = defineProps({
   modalId: {
     type: String,
@@ -17,16 +15,14 @@ const props = defineProps({
     type: String,
     default: 'Modal body goes in here'
   },
-  showModal: {
-    type: Boolean,
-    default: false
-  }
 });
-// console.log(props)
+
+const modal: Ref<Modal | null> = ref(null)
+
+
 const displayModal = () => {
-  console.log(props)
-  const modal = new Modal(document.getElementById(props.modalId) as HTMLElement)
-  modal.show()
+  modal.value = new Modal(document.getElementById(props.modalId) as HTMLElement)
+  modal.value.show()
 }
 
 onMounted(()=>{
@@ -47,13 +43,15 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div class="modal fade" :id="modalId" tabindex="-1" aria-hidden="true" @show-modal="showModal">
+  <div class="modal fade" :id="modalId" tabindex="-1"
+       @click.self="closeModal"
+       aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <slot name="title">
             <h5 class="modal-title fs-5">{{ title }}</h5>
-            <button type="button" class="btn-close hover:dark:bg-gray-600" @click="hideModal" aria-label="Close"></button>
+            <button type="button" class="btn-close hover:dark:bg-gray-600 " @click="closeModal" aria-label="Close"></button>
           </slot>
         </div>
         <div class="modal-body">
@@ -63,11 +61,13 @@ const closeModal = () => {
         </div>
         <div class="modal-footer">
           <slot name="footer">
-<!--            <button type="button" class="btn btn-secondary" @click="hideModal">Close</button>-->
-<!--            <button type="button" class="btn btn-primary">Save changes</button>-->
           </slot>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+
+</style>
