@@ -1,28 +1,55 @@
 <script setup lang="ts">
 import { Chart } from 'chart.js/auto'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import {nextTick, onMounted, ref, watch, type Ref } from 'vue'
 
 const doughnutChart = ref<null | HTMLCanvasElement>(null)
-let doughnutChartInstance:  Chart<'doughnut', number[], string>  | null = null
-
-interface DataInterface {
-  labels: string[]
-  datasets: {
-    label: string
-    data: number[]
-    backgroundColor: string[]
-  }[]
-}
+const doughnutChartInstance:  Ref<Chart<'doughnut', number[], string>  | null> = ref(null)
 
 const props = defineProps<{
-  chartData: DataInterface
-  chartOptions: Record<string, unknown>
+  data: number[],
   isError: boolean
 }>()
 
 const isChartDisplay = ref(false)
-const isZeros = computed(()=>{
-  return  props.chartData.datasets[0].data.every((value: number)=> value === 0)
+const isAllZeros = ref(false)
+
+// const doughnutOptions = {
+//   responsive: true,
+//   cutout: '75%',
+//   radius: '53%',
+//   plugins: {
+//     legend: {
+//       display: true,
+//       position: 'bottom',
+//       align: 'center',
+//       padding: 20,
+//
+//       labels: {
+//         usePointStyle: true,
+//         pointStyle: 'rounded',
+//         boxWidth: 20,
+//         borderRadius: 10,
+//         pointSize: 20,
+//       },
+//     },
+//   },
+// }
+
+const doughnutData = ref({
+  labels: ['Click', 'Users', 'Active users'],
+  datasets: [
+    {
+      label: 'My First Dataset',
+      data: [] as number[],
+      backgroundColor: [
+        'rgba(122, 182, 255, 1)',
+        'rgba(  250, 190, 119, 1)',
+        'rgba(195, 122, 255, 1)',
+
+      ],
+      borderWidth: 6,
+    },
+  ],
 })
 const checkZeros = ()=>{
  isAllZeros.value =  props.data.every(item => item === 0)
