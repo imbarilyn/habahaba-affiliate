@@ -99,29 +99,28 @@ const renderChart = () => {
       },
     )
   }
-  }
+}
 }
 
 // create the chart when the component is mounted
 onMounted(() => {
-  renderChart()
+checkZeros()
 })
 
 // If the props get to change then update the chart
 watch(
-  () => props.chartData,
-  value => {
-    if (doughnutChartInstance) {
-      doughnutChartInstance.data = value
-      doughnutChartInstance.update()
-    }
+  () => props.data,
+  () => {
+    nextTick(() => {
+      checkZeros()
+    })
   },
 )
 </script>
 
 <template>
-  <div>
-    <span class="text-responsive d-flex justify-content-center border-bottom p-3">Total View Performance</span>
+  <div style="margin-bottom: 0; padding-bottom: 0;">
+    <span class="text-responsive d-flex justify-content-center border-bottom p-3 text-nowrap">Total View Performance</span>
     <div v-if="!isChartDisplay">
       <div
         class="d-flex align-items-center justify-content-center"
@@ -134,7 +133,7 @@ watch(
             style="width: 150px"
           />
           <span
-            v-if="isZeros"
+            v-if="isAllZeros"
             class="text-gray-600 w-75 text-sm text-center pt-4"
           >
         You have no community count yet for performance analysis. Please generate
@@ -147,10 +146,9 @@ watch(
           >
         </div>
       </div>
-
     </div>
-    <div v-else>
-      <canvas ref="doughnutChart"  width="100%" height="30"></canvas>
+    <div v-else class="">
+      <canvas ref="doughnutChart"></canvas>
     </div>
   </div>
 </template>
