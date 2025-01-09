@@ -29,15 +29,13 @@ export interface UserInfo {
   phoneNo: string
   username: string
   exp?: number
+  email: string
 }
 export const useAuthStore = defineStore('useAuthStore', ()=>{
-  const token = useStorage('af-token', '')
+  const token = useStorage('affiliate-token', '')
   const isLoggedIn = ref(false)
   const tokenExpiry = useStorage('af-token-expiry', '')
   const user = useStorage('af-user', '')
-  const isEverLoggedIn = useStorage('_h_eve_lgg_in_', false)
-
-
   const getIsLoggedIn = computed(()=>isLoggedIn.value)
   const getToken = computed(()=>token.value)
   const userIsLoggedIn = computed(()=>{
@@ -56,7 +54,6 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
 
   // create affiliate account
   async function createAffiliate (affiliatePayload: AffiliatePayload){
-    console.log("!!", BASE_URL)
     try{
       const response = await fetch(`${BASE_URL}/affiliate/register-affiliate/`, {
         method: 'POST',
@@ -66,12 +63,25 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
         mode: 'cors',
         body: JSON.stringify(affiliatePayload)
       })
+      // if (!response.ok){
+      //   console.log('failed to create affiliate', response)
+      //   return {
+      //     result: 'error',
+      //     message: ''
+      //   }
+      // }
+
       const data = await response.json()
-      console.log(data)
-      return data
+      return {
+        result: data.result,
+        message: data.message
+      }
     }
     catch (error){
-      console.error(error)
+      return {
+        result: 'error',
+        message: 'An error occurred while trying to create affiliate account'
+      }
     }
   }
 
@@ -86,7 +96,6 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
         body: JSON.stringify(affiliatePayload)
       })
       const data = await response.json()
-      console.log('Login message',data)
       if(data.result === 'ok'){
         await setUserData(data)
         return data
@@ -96,13 +105,13 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
       }
     }
     catch(error){
-      console.log(error)
+      // console.log(error)
+      return
     }
   }
 
   async function setUserData (data: {token: string}){
-    token.value = data.token
-    isEverLoggedIn.value = true
+    setToken(data.token)
     isLoggedIn.value = true
     const decode: UserInfo = jwtDecode(data.token)
     tokenExpiry.value = decode.exp?.toString()
@@ -111,6 +120,7 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
       lastName: decode.lastName,
       phoneNo: decode.phoneNo,
       username: decode.username,
+      email: decode.email
     })
     return {
       result: 'ok',
@@ -118,6 +128,14 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     }
   }
 
+  function setToken (value: string){
+   try{
+     token.value = value
+   }catch(error){
+      console.log(error)
+   }
+
+  }
   function setUserInfo(usr: UserInfo){
     user.value = JSON.stringify({
       ...usr
@@ -147,6 +165,6 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     userIsLoggedIn,
     getToken,
     getIsLoggedIn,
-    token
+    token,
   }
 })
