@@ -43,7 +43,13 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
   const userIsLoggedIn = computed(()=>{
     const expiry = moment.unix(Number(tokenExpiry.value)).utc()
     const now = moment().utc()
-    return token.value && expiry.isAfter(now)
+    const isValid = token.value && expiry.isAfter(now)
+    console.log('token', token.value)
+    console.log('expiry', tokenExpiry.value)
+    if(!isValid){
+      logout()
+    }
+    return isValid
   })
 
 
