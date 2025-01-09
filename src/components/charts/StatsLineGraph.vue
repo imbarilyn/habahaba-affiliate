@@ -70,31 +70,35 @@ const lineData: Ref = ref({
   ],
 })
 const renderChart = () => {
-  if (refLineGraph.value) {
-    lineGraphInstance.value = new Chart(refLineGraph.value, {
-      type: 'line',
-      data: lineData.value,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: false,
-            text: 'Community Savings Vs Affiliate Earning',
+  nextTick(()=>{
+    if (refLineGraph.value) {
+      lineGraphInstance.value = new Chart(refLineGraph.value, {
+        type: 'line',
+        data: lineData.value,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false,
+              text: 'Community Savings Vs Affiliate Earning',
+            },
+            // scales: {
+            //   y: {
+            //     title: {
+            //       display: true,
+            //       text: 'Amount in Ksh',
+            //     },
+            //     beginAtZero: true,
+            //   },
+            // },
           },
-          // scales: {
-          //   y: {
-          //     title: {
-          //       display: true,
-          //       text: 'Amount in Ksh',
-          //     },
-          //     beginAtZero: true,
-          //   },
-          // },
         },
-      },
-    })
-  }
+      })
+    }
+
+  })
+
 }
 
 
