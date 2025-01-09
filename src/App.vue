@@ -1,7 +1,9 @@
 <script setup lang="ts">
+
 import ToastContainer from '@/components/toasts/ToastContainer.vue'
 import ToastAlert from '@/components/toasts/ToastAlert.vue'
-import { useNotificationsStore } from '@/stores/notificationStore'
+import { useNotificationsStore} from '@/stores'
+
 
 const notificationsStore = useNotificationsStore()
 </script>
@@ -13,7 +15,7 @@ const notificationsStore = useNotificationsStore()
         <component :is="Component" :key="route.fullPath"/>
       </template>
     </RouterView>
-    <teleport to="body">
+    <Teleport to="body">
       <ToastContainer v-if="notificationsStore.hasNotifications">
         <template v-for="notification in notificationsStore.getNotifications" :key="notification.id">
           <ToastAlert
@@ -25,7 +27,8 @@ const notificationsStore = useNotificationsStore()
           />
         </template>
       </ToastContainer>
-    </teleport>
+    </Teleport>
+
   </div>
 </template>
 

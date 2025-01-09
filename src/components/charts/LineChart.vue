@@ -70,9 +70,6 @@ const renderChart = async () => {
   if (lineGraphInstance.value) {
     lineGraphInstance.value.destroy()
   }
-  console.log('chart-display', isChartDisplay.value)
-  console.log('zero-values', isZeroValues.value)
-  console.log('error', isErrorFetchingData.value)
 
   if (refLineGraph.value) {
     lineGraphInstance.value = new Chart(
@@ -102,12 +99,12 @@ const isErrorFetchingData = ref(false)
 const isZeroValues = ref(false)
 
 const checkZeroValues = () => {
-  console.log('lineData', lineData)
+  // console.log('lineData', lineData)
   const allZeros = lineData.datasets.every(dataset => {
     return dataset.data.every((item: number) => item === 0)
   })
 
-  console.log('allZeros', allZeros)
+  // console.log('allZeros', allZeros)
   if (allZeros) {
     isZeroValues.value = true
     isChartDisplay.value = false
@@ -118,9 +115,9 @@ const checkZeroValues = () => {
       renderChart()
     })
   }
-  console.log('isZeros', isZeroValues.value)
-  console.log('isChartDisplay', isChartDisplay.value)
-  console.log('isErrorFetchingData', isErrorFetchingData.value)
+  // console.log('isZeros', isZeroValues.value)
+  // console.log('isChartDisplay', isChartDisplay.value)
+  // console.log('isErrorFetchingData', isErrorFetchingData.value)
 }
 
 const createChartLabel = (selectedTab: string) => {
@@ -186,9 +183,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-
-      <div class="d-flex  gap-1">
+      <div class="d-flex gap-1 pb-3">
         <div v-for="(tab, index) in lineChartTabs" :key="index" class="">
           <span
             class="btn rounded-pill"
@@ -203,36 +198,36 @@ onMounted(() => {
         </div>
       </div>
     <div v-if="isChartDisplay">
-        <canvas ref="refLineGraph"></canvas>
+        <canvas ref="refLineGraph" height="130px"></canvas>
     </div>
 
     <div v-else class="d-flex justify-content-center pb-5 align-items-center"
     style="height: 300px">
-      <div class="d-flex flex-column align-items-center">
+      <div class="d-flex flex-column align-items-center pt-md-10 pb-5 pb-md-0">
         <img
           src="/images/statistics-earning.png"
           alt="community-photo"
-          style="width: 300px"
+          class="img"
           :class="[isErrorFetchingData? 'pt-md-5 pb-md-3 ': '']"
         />
         <span
           v-if="isZeroValues"
-          class="text-gray-600 pt-md-4 pb-5 pb-md-0 w-75 text-sm text-center"
+          class="text-gray-600 pt-md-4 pb-5 pb-md-0  w-75 text-sm text-center"
         >
           You have no earnings yet to compare. Please generate the affiliate link and share with your community to start earning
         </span>
         <span
           v-if="isErrorFetchingData"
-          class="text-gray-600 pb-4 text-sm"
+          class="text-gray-600 text-sm"
           >Opps! No relevant data. Please try to refresh the page</span
         >
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
 .btn-no-hover:hover {
   background-color: inherit !important;
 }
+
 </style>

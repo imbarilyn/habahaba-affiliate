@@ -1,44 +1,45 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import AlertMessage from '@/components/AlertMessage.vue'
-import { useAffiliateStore, useNotificationsStore } from '@/stores'
+import {
+  useAffiliateStore,
+  useAuthStore,
+  useNotificationsStore,
+  useTabStore,
+} from '@/stores'
 import DialogModal from '@/components/DialogModal.vue'
-import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const affiliateStore = useAffiliateStore()
-const notificationsStore = useNotificationsStore()
+const authStore = useAuthStore()
+const tabStore = useTabStore()
+const router = useRouter()
+
 // slidding the navbar
 const showSidebar = ref(false)
 watch(showSidebar, val => {
+  // alert(val)
   if (val) {
     document.body.classList.add('sidenav-toggled')
   } else {
-    document.body.classList.remove('sidenav-toggled')
+      document.body.classList.remove('sidenav-toggled')
+
   }
 })
+
+const notificationsStore = useNotificationsStore()
+
 const linkProps = {
   modalId: 'affiliateLink',
   title: 'Create your own affiliate link',
 }
 
-// show the dialogModal for the affiliate link generation
-const showModal = ref(false)
-watch(
-  () => affiliateStore.openDialog.isOpen,
-  val => {
-    console.log('watching the val', val)
-    if (val) {
-      showModal.value = true
-    } else {
-      showModal.value = false
-    }
-  },
-)
-
 // Now generating the affiliate link
 const showSpinner = ref(false)
 const showCopyLink = ref(false)
 const affiliateLink = ref('')
+
+// affiliate link generation
 const generateLink = () => {
   console.log('generating link')
   showSpinner.value = true
@@ -138,20 +139,24 @@ const handleTransaction = ()=>{
       id="sidenavAccordion"
     >
       <!-- Sidenav Toggle Button-->
+
       <button
-        @click="showSidebar = !showSidebar"
-        class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mt-3 me-2 ms-lg-2 me-lg-0"
-        id="sidebarToggle"
+        class="btn btn-icon btn-transparent order-1  d-lg-none border-0  order-lg-0 me-2 ms-lg-2 me-lg-0 pt-3"
+        id="sidebarToggle" @click="showSidebar = !showSidebar"
       >
-        <span class="material-icons-outlined cursor-pointer"> menu </span>
+        <span class="material-icons-outlined fs-6 text-gray-600"> menu </span>
       </button>
-      <img
-        src="../../public/images/habahaba-logo.png"
-        style="width: 90px"
-        class="navbar-brand mb-2 ms-4"
-      />
+      <div class="pb-3 ps-4">
+        <img
+          class="navbar-brand navbar-brand me-10"
+          src="/images/habahaba-logo.png"
+          style="width: 100px; height: 45px"
+        />
+      </div>
+
+      <!-- Navbar Search Input-->
       <!-- * * Note: * * Visible only on and above the lg breakpoint-->
-      <form class="form-inline me-auto d-none d-lg-block me-3 ms-lg-10">
+      <form class="form-inline me-auto d-none d-lg-block ms-4 me-3">
         <div class="input-group input-group-joined input-group-solid">
           <input
             class="form-control pe-0"
@@ -160,19 +165,15 @@ const handleTransaction = ()=>{
             aria-label="Search"
           />
           <div class="input-group-text">
-            <span class="material-icons-outlined" style="opacity: 0.5"
-              >search</span
-            >
+            <span class="material-icons-outlined text-gray-600"> search </span>
           </div>
         </div>
       </form>
       <!-- Navbar Items-->
       <ul class="navbar-nav align-items-center ms-auto">
-        <!-- Navbar Search Dropdown-->
-        <!-- * * Note: * * Visible only below the lg breakpoint-->
         <li class="nav-item dropdown no-caret me-3 d-lg-none">
           <a
-            class="btn btn-icon btn-transparent-dark outline-none rounded-circle dropdown-toggle"
+            class="btn btn-icon btn-transparent-dark dropdown-toggle"
             id="searchDropdown"
             href="#"
             role="button"
@@ -180,9 +181,9 @@ const handleTransaction = ()=>{
             aria-haspopup="true"
             aria-expanded="false"
           >
-            <span class="material-icons-outlined" style="opacity: 0.5"
-              >search</span
-            ></a
+            <span class="material-icons-outlined text-gray-600">
+              search
+            </span></a
           >
           <!-- Dropdown - Search-->
           <div
@@ -199,7 +200,7 @@ const handleTransaction = ()=>{
                   aria-describedby="basic-addon2"
                 />
                 <div class="input-group-text">
-                  <span class="material-icons-outlined opacity-75">search</span>
+                  <i data-feather="search"></i>
                 </div>
               </div>
             </form>
@@ -210,53 +211,112 @@ const handleTransaction = ()=>{
           class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications"
         >
           <a
-            class="btn btn-icon btn-transparent-dark dropdown-toggle rounded-circle"
+            class="btn btn-icon btn-transparent-dark border-0 dropdown-toggle rounded-circle"
             id="navbarDropdownAlerts"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            ><span class="material-icons-outlined opacity-75">
-              notifications
-            </span></a
           >
+            <span class="material-icons-outlined"> notifications </span>
+          </a>
           <div
             class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
             aria-labelledby="navbarDropdownAlerts"
           >
+
             <h6
-              class="dropdown-header dropdown-notifications-header bg-habahaba-700"
+              class="dropdown-header dropdown-notifications-header bg-habahaba-300"
             >
-              <span class="material-icons-outlined opacity-75 fs-6 pe-2">
+              <span class="material-icons-outlined text-habahaba-950 me-2">
                 notifications
               </span>
-              Alerts Center
+              <span class="text-habahaba-950">Alerts Center</span>
             </h6>
             <!-- Example Alert 1-->
-            <AlertMessage />
+            <a class="dropdown-item dropdown-notifications-item" href="#!">
+              <div class="dropdown-notifications-item-icon bg-warning">
+                <i data-feather="activity"></i>
+              </div>
+              <div class="dropdown-notifications-item-content">
+                <div class="dropdown-notifications-item-content-details">
+                  December 29, 2021
+                </div>
+                <div class="dropdown-notifications-item-content-text">
+                  This is an alert message. It's nothing serious, but it
+                  requires your attention.
+                </div>
+              </div>
+            </a>
+            <!-- Example Alert 2-->
+            <a class="dropdown-item dropdown-notifications-item" href="#!">
+              <div class="dropdown-notifications-item-icon bg-info">
+                <i data-feather="bar-chart"></i>
+              </div>
+              <div class="dropdown-notifications-item-content">
+                <div class="dropdown-notifications-item-content-details">
+                  December 22, 2021
+                </div>
+                <div class="dropdown-notifications-item-content-text">
+                  A new monthly report is ready. Click here to view!
+                </div>
+              </div>
+            </a>
+            <!-- Example Alert 3-->
+            <a class="dropdown-item dropdown-notifications-item" href="#!">
+              <div class="dropdown-notifications-item-icon bg-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="dropdown-notifications-item-content">
+                <div class="dropdown-notifications-item-content-details">
+                  December 8, 2021
+                </div>
+                <div class="dropdown-notifications-item-content-text">
+                  Critical system failure, systems shutting down.
+                </div>
+              </div>
+            </a>
+            <!-- Example Alert 4-->
+            <a class="dropdown-item dropdown-notifications-item" href="#!">
+              <div class="dropdown-notifications-item-icon bg-success">
+                <i data-feather="user-plus"></i>
+              </div>
+              <div class="dropdown-notifications-item-content">
+                <div class="dropdown-notifications-item-content-details">
+                  December 2, 2021
+                </div>
+                <div class="dropdown-notifications-item-content-text">
+                  New user request. Woody has requested access to the
+                  organization.
+                </div>
+              </div>
+            </a>
+            <a class="dropdown-item dropdown-notifications-footer" href="#!"
+              >View All Alerts</a
+            >
           </div>
         </li>
-        <!-- Messages Dropdown-->
-        <li class="nav-item d-none d-sm-block me-3 dropdown-notifications">
+        <!--       Create Link-->
+        <li class="nav-item d-none d-sm-block me-3">
           <a
-            class="btn btn-icon btn-transparent-dark rounded-circle d-flex items-center justify-content-center"
-            role="button"
-            @click="affiliateStore.setOpenAffiliateDialog(true)"
+            @click="createLink"
+            class="btn btn-icon btn-transparent-dark border-0 rounded-circle d-flex justify-content-center align-content-center"
             ><span class="material-icons-outlined rotate"> link </span></a
           >
         </li>
         <!-- User Dropdown-->
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
           <a
-            class="btn btn-icon btn-transparent-dark dropdown-toggle"
+            class="btn btn-icon btn-transparent-dark dropdown-toggle rounded-circle"
             id="navbarDropdownUserImage"
+            href="javascript:void(0);"
             role="button"
             data-bs-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
             ><img
-              class="img-fluid"
-              src="../../public/illustrations/profiles/profile-1.png"
+              class="img-fluid rounded-circle"
+              src="/illustrations/profiles/profile-1.png"
           /></a>
           <div
             class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
@@ -264,23 +324,28 @@ const handleTransaction = ()=>{
           >
             <h6 class="dropdown-header d-flex align-items-center">
               <img
-                class="dropdown-user-img"
-                src="../../public/illustrations/profiles/profile-1.png"
+                class="dropdown-user-img rounded-circle"
+                src="/illustrations/profiles/profile-1.png"
               />
               <div class="dropdown-user-details">
-                <div class="dropdown-user-details-name">Valerie Luna</div>
+                <div class="dropdown-user-details-name dropdown-user-details">
+                  {{ authStore.getUserInfo()?.username }}
+                </div>
               </div>
             </h6>
-            <div class="dropdown dropdown-hover"></div>
-            <a class="dropdown-item" href="#!">
+            <a class="dropdown-item">
               <div class="dropdown-item-icon">
-                <span class="material-icons-outlined fs-5"> settings </span>
+                <span class="material-icons-outlined fs-5 text-gray-600">
+                  settings
+                </span>
               </div>
-              Setting
+              Account
             </a>
-            <a class="dropdown-item" href="#!">
+            <a class="dropdown-item curso" @click="logOut">
               <div class="dropdown-item-icon">
-                <span class="material-icons-outlined fs-5"> logout </span>
+                <span class="material-icons-outlined fs-5 text-gray-600">
+                  logout
+                </span>
               </div>
               Logout
             </a>
@@ -288,158 +353,304 @@ const handleTransaction = ()=>{
         </li>
       </ul>
     </nav>
-    <!--    Sidenav section-->
+
+    <!--    Side-nav-->
     <div id="layoutSidenav">
       <div id="layoutSidenav_nav">
-        <nav class="sidenav shadow-right sidenav-light bg-habahaba-950">
+        <nav class="sidenav shadow-right sidenav-light bg-habahaba-900">
           <div class="sidenav-menu">
-            <div class="pt-4 d-flex flex-column gap-4 ps-3">
-              <div type="button" class="btn">
-                <div class="d-flex gap-2">
-                  <span
-                    class="material-icons-round"
-                    :class="[
-                      route.name === 'overview'
-                        ? 'text-habahaba-300'
-                        : ' text-white',
-                    ]"
-                  >
+            <div class="nav accordion" id="accordionSidenav">
+              <!-- Sidenav Menu Heading (Account)-->
+              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
+              <div class="sidenav-menu-heading">Menu</div>
+              <!-- Sidenav Link (Alerts)-->
+              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
+              <a class="nav-link d-sm-none" href="#!">
+                <div class="nav-link-icon">
+                  <span class="material-icons nav-link-icon fs-5">
+                    notifications
+                  </span>
+                </div>
+                Alerts
+                <span class="badge bg-warning-soft text-habahaba-300 ms-auto"
+                  >4 New!</span
+                >
+              </a>
+              <!-- Sidenav Link (Messages)-->
+              <!-- * * Note: * * Visible only on and above the sm breakpoint-->
+              <div @click="createLink" :class="[[tabStore.activeTab === 'createLink'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]">
+              <a class="nav-link d-sm-none  border-0" href="#!">
+
+                  <span class="material-icons rotate nav-link-icon fs-5" :class="[tabStore.activeTab === 'createLink'? 'text-habahaba-300': '']">link</span>
+
+               <span>Create Link</span>
+              </a>
+
+              </div>
+              <a
+                class="nav-link collapsed"
+                href="javascript:void(0);"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseDashboards"
+                aria-expanded="false"
+                aria-controls="collapseDashboards"
+                @click='handleOverview'
+                :class="[[tabStore.activeTab === 'overview'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
+              >
+                <div class="nav-link-icon">
+                  <span class="material-icons-round nav-link-icon fs-5" :class="[tabStore.activeTab === 'overview'? 'text-habahaba-300': '']">
                     grid_view
                   </span>
-                  <span class="fw-medium text-white">Overview</span>
                 </div>
-              </div>
-              <div
-                type="button"
-                class="btn dropdown d-flex justify-content-between"
+                Overview
+                <!--                <div class="sidenav-collapse-arrow">-->
+                <!--                  <i class="fas fa-angle-down"></i>-->
+                <!--                </div>-->
+              </a>
+              <!-- Sidenav Heading (Custom)-->
+              <!--              <div class="sidenav-menu-heading"></div>-->
+              <!-- Sidenav Accordion (Pages)-->
+              <a
+                class="nav-link collapsed"
+                href="javascript:void(0);"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapsePages"
+                aria-expanded="false"
+                aria-controls="collapsePages"
+
+                @click="handleStatistic"
+                :class="[[tabStore.activeTab === 'statistics'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
               >
-                <div class="nav-link-icon d-flex align-items-end gap-2">
-                  <span class="material-icons-round text-habahaba-300">
+                <div class="nav-link-icon">
+                  <span class="material-icons-round nav-link-icon fs-5" :class="[tabStore.activeTab === 'statistics'? 'text-habahaba-300': '']">
                     bar_chart
                   </span>
-                  <span class="text-white">Statistics</span>
                 </div>
-                <div class="sidenav-collapse-arrow">
-                  <span class="material-icons-round text-white">
-                    navigate_next
-                  </span>
-                </div>
-              </div>
-              <div
-                type="button"
-                class="btn dropdown d-flex justify-content-between"
+                Statistics
+              </a>
+
+              <!-- Sidenav Accordion (Applications)-->
+<!--              <a-->
+<!--                class="nav-link collapsed"-->
+<!--                href="javascript:void(0);"-->
+<!--                data-bs-toggle="collapse"-->
+<!--                data-bs-target="#collapseApps"-->
+<!--                aria-expanded="false"-->
+<!--                aria-controls="collapseApps"-->
+<!--                @click="tabStore.setActiveTab('reports')"-->
+<!--                :class="[[tabStore.activeTab === 'reports'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"-->
+<!--              >-->
+<!--                <div class="nav-link-icon">-->
+<!--                  <span class="material-icons-round nav-link-icon fs-5" :class="[tabStore.activeTab === 'reports'? 'text-habahaba-300': '']">-->
+<!--                    summarize-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--                Reports-->
+<!--                <div class="sidenav-collapse-arrow">-->
+<!--                  <span class="material-icons-round fs-4"> expand_more </span>-->
+<!--                </div>-->
+<!--              </a>-->
+<!--              <div-->
+<!--                class="collapse"-->
+<!--                id="collapseApps"-->
+<!--                data-bs-parent="#accordionSidenav"-->
+<!--              >-->
+<!--                <nav-->
+<!--                  class="sidenav-menu-nested nav accordion"-->
+<!--                  id="accordionSidenavAppsMenu"-->
+<!--                >-->
+<!--                  &lt;!&ndash; Nested Sidenav Accordion (Apps -> Knowledge Base)&ndash;&gt;-->
+<!--                  <a-->
+<!--                    class="nav-link collapsed"-->
+<!--                    href="javascript:void(0);"-->
+<!--                    data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#appsCollapseKnowledgeBase"-->
+<!--                    aria-expanded="false"-->
+<!--                    aria-controls="appsCollapseKnowledgeBase"-->
+<!--                  >-->
+<!--                    Daily-->
+<!--                  </a>-->
+
+<!--                  <a-->
+<!--                    class="nav-link collapsed"-->
+<!--                    href="javascript:void(0);"-->
+<!--                    data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#appsCollapseUserManagement"-->
+<!--                    aria-expanded="false"-->
+<!--                    aria-controls="appsCollapseUserManagement"-->
+<!--                  >-->
+<!--                    Weekly-->
+<!--                  </a>-->
+<!--                  <a-->
+<!--                    class="nav-link collapsed"-->
+<!--                    href="javascript:void(0);"-->
+<!--                    data-bs-toggle="collapse"-->
+<!--                    data-bs-target="#appsCollapsePostsManagement"-->
+<!--                    aria-expanded="false"-->
+<!--                    aria-controls="appsCollapsePostsManagement"-->
+<!--                  >-->
+<!--                    Monthly-->
+<!--                    <div class="sidenav-collapse-arrow">-->
+<!--                      <i class="fas fa-angle-down"></i>-->
+<!--                    </div>-->
+<!--                  </a>-->
+<!--                </nav>-->
+<!--              </div>-->
+              <!-- Sidenav Accordion (Flows)-->
+              <a
+                class="nav-link collapsed"
+                href="javascript:void(0);"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseFlows"
+                aria-expanded="false"
+                aria-controls="collapseFlows"
+
+                @click="handleTransaction"
+                :class="[[tabStore.activeTab === 'transactions'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
               >
-                <div class="nav-link-icon d-flex align-items-end gap-2">
-                  <span class="material-icons-round text-habahaba-300">
+                <div class="nav-link-icon">
+                  <span class="material-icons-round nav-link-icon fs-5" :class="[tabStore.activeTab === 'transactions'? 'text-habahaba-300': '']">
                     wallet
                   </span>
-                  <span class="text-white">Transactions</span>
                 </div>
-                <div class="sidenav-collapse-arrow">
-                  <span class="material-icons-round text-white">
-                    navigate_next
+                Transactions
+<!--                <div class="sidenav-collapse-arrow">-->
+<!--                  <span class="material-icons-round fs-4"> expand_more </span>-->
+<!--                </div>-->
+              </a>
+<!--              <div-->
+<!--                class="collapse"-->
+<!--                id="collapseFlows"-->
+<!--                data-bs-parent="#accordionSidenav"-->
+<!--              >-->
+<!--                <nav class="sidenav-menu-nested nav">-->
+<!--                  <a class="nav-link" href="#">Payment Options</a>-->
+<!--                  <a class="nav-link" href="#">Statements</a>-->
+<!--                </nav>-->
+<!--              </div>-->
+              <a
+                class="nav-link collapsed"
+                href="javascript:void(0);"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseLayouts"
+                aria-expanded="false"
+                aria-controls="collapseLayouts"
+                @click="tabStore.setActiveTab('viewLink')"
+                :class="[[tabStore.activeTab === 'viewLink'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
+              >
+                <div class="nav-link-icon">
+                  <span class="material-icons rotate nav-link-icon fs-5" :class="[tabStore.activeTab === 'viewLink'? 'text-habahaba-300': '']">
+                    link
                   </span>
                 </div>
-              </div>
-              <div
-                type="button"
-                class="btn dropdown d-flex justify-content-between"
-              >
-                <div class="nav-link-icon d-flex align-items-end gap-2">
-                  <span class="material-icons-round rotate text-habahaba-300"> link </span>
-                  <span class="text-white">Affiliate Links</span>
-                </div>
-                <div class="sidenav-collapse-arrow">
-<!--                  <span class="material-icons-round text-white">-->
-<!--                    navigate_next-->
-<!--                  </span>-->
-                </div>
-              </div>
+                Affiliate Links
+              </a>
             </div>
           </div>
           <!-- Sidenav Footer-->
-          <div class="bg-habahaba-200 rounded m-2 py-3">
-            <div
-              type="button"
-              class="btn dropdown d-flex justify-content-between"
-            >
-              <div class="nav-link-icon d-flex align-items-center gap-2">
+          <div class="sidenav-footer mx-2 mb-2">
+            <div class="sidenav-footer-content">
+              <div class="sidenav-footer-subtitle">Logged in as:</div>
+              <div class="d-flex gap-1">
                 <img
-                  class="img-fluid w-25 rounded-circle"
-                  src="../../public/illustrations/profiles/profile-1.png"
+                  src="/illustrations/profiles/profile-1.png"
+                  class="rounded-circle"
+                  style="width: 40px"
                 />
-                <span style="font-size: 14px">Valeria Luna</span>
+                <div>
+                  <div class="sidenav-footer-title">
+                    {{ authStore.getUserInfo()?.username }}
+                  </div>
+                  <span style="font-size: 11px" class="text-gray-700">{{
+                    authStore.getUserInfo()?.email
+                  }}</span>
+                </div>
               </div>
             </div>
-
           </div>
         </nav>
       </div>
 
-      <div id="layoutSidenav_content">
-        <RouterView #default="{ Component, route }">
-          <Transition mode="out-in">
-            <template v-if="Component">
-              <component :is="Component" :key="route.fullPath" />
-            </template>
-          </Transition>
-        </RouterView>
+      <div id="layoutSidenav_content" class="bg-habahaba-100" style="">
+        <div v-if="!affiliateStore.appIsFetching">
+          <RouterView #default="{ Component, route }">
+            <Transition mode="out-in" appear>
+              <template v-if="Component">
+                <component :is="Component" :key="route.fullPath" />
+              </template>
+            </Transition>
+          </RouterView>
+        </div>
+        <div v-else>
+          <LoadingSpinner />
+        </div>
       </div>
     </div>
-    <DialogModal
-      :modal-id="linkProps.modalId"
-      :title="linkProps.title"
-      :show-modal="showModal"
-      v-if="affiliateStore.openDialog.isOpen"
-    >
-      <template #body>
-        <div>
-          <p class="fs-6">Copy the link to share it with prospects</p>
-          <div
-            class="border py-2 px-2 d-flex justify-content-between w-full gap-2 rounded-pill"
-          >
-            <input
-              v-model="affiliateLink"
-              type="text"
-              class="focus-control w-75 ps-2 border-0 focus-ring-rounded focus-ring-light ms-2"
-              placeholder="https://habahaba.com/"
-            />
+    <div  v-if="affiliateStore.openCreateLinkDialog.isOpen"    >
+      <DialogModal  :modal-id="linkProps.modalId"  :title="linkProps.title" @show-dialog="handelCloseModal">
+        <template #body>
+          <div>
+            <p class="fs-6">Copy the link to share it with prospects</p>
             <div
-              v-if="!showSpinner && !showCopyLink"
-              @click="generateLink"
-              type="button"
-              class="btn btn-habahaba-500 d-flex justify-content-center align-items-center rounded-pill"
+              class="border py-2 px-2 d-flex justify-content-between w-full gap-2 rounded-pill"
             >
-              <span class="material-icons-outlined rotate"> link </span>
-              <span class="text-nowrap">generate link</span>
-            </div>
-            <div
-              v-if="showSpinner"
-              class="d-flex align-items-center gap-2 btn btn-habahaba-100 rounded-pill"
-              disabled
-            >
-              <span>generating...</span>
-              <div class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
+              <input
+                v-model="affiliateLink"
+                type="text"
+                class="focus-control w-75 ps-2 border-0 focus-ring-rounded focus-ring-light ms-2"
+                placeholder="https://habahaba.com/"
+              />
+              <div
+                v-if="!showSpinner && !showCopyLink"
+                @click="generateLink"
+                type="button"
+                class="btn btn-habahaba-500 d-flex justify-content-center align-items-center rounded-pill"
+              >
+                <span class="material-icons-outlined rotate"> link </span>
+                <span class="text-nowrap">generate link</span>
+              </div>
+              <div
+                v-if="showSpinner"
+                class="d-flex align-items-center gap-2 btn btn-habahaba-100 rounded-pill"
+                disabled
+              >
+                <span>generating...</span>
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+
+              <div
+                v-if="showCopyLink"
+                class="btn btn-habahaba-500 rounded-pill"
+                @click="copyAffiliateLink"
+              >
+                <div
+                  v-if="isLinkCopied"
+                  class="d-flex gap-1 align-items-center"
+                >
+                  <span class="material-icons-outlined"> done </span>
+                  <span>Copied</span>
+                </div>
+                <div v-else class="d-flex gap-2 align-items-center">
+                  <span class="material-icons-outlined fs-6">
+                    content_copy
+                  </span>
+                  <span>copy</span>
+                </div>
               </div>
             </div>
-
-            <div
-              v-if="showCopyLink"
-              class="btn btn-habahaba-500 d-flex gap-2 rounded-pill"
-            >
-              <span class="material-icons-outlined fs-6"> content_copy </span>
-              <span>copy</span>
-            </div>
           </div>
-        </div>
-      </template>
-    </DialogModal>
+        </template>
+      </DialogModal>
+    </div>
+
+
   </div>
 </template>
 
 <style scoped>
-.rotate {
-  transform: rotate(-45deg);
+.dropdown-menu {
+  z-index: 1050;
 }
 </style>

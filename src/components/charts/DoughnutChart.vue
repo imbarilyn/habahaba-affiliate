@@ -1,70 +1,126 @@
 <script setup lang="ts">
 import { Chart } from 'chart.js/auto'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import {nextTick, onMounted, ref, watch, type Ref } from 'vue'
 
 const doughnutChart = ref<null | HTMLCanvasElement>(null)
-let doughnutChartInstance:  Chart<'doughnut', number[], string>  | null = null
-
-interface DataInterface {
-  labels: string[]
-  datasets: {
-    label: string
-    data: number[]
-    backgroundColor: string[]
-  }[]
-}
+const doughnutChartInstance:  Ref<Chart<'doughnut', number[], string>  | null> = ref(null)
 
 const props = defineProps<{
-  chartData: DataInterface
-  chartOptions: Record<string, unknown>
+  data: number[],
   isError: boolean
 }>()
 
 const isChartDisplay = ref(false)
-const isZeros = computed(()=>{
-  return  props.chartData.datasets[0].data.every((value: number)=> value === 0)
-})
+const isAllZeros = ref(false)
 
-// just waiting for the DOM to be fully updated before the chartJs lib accesses the canvas element
-const renderChart = async () => {
-  if(isZeros.value  || props.isError){
+// const doughnutOptions = {
+//   responsive: true,
+//   cutout: '75%',
+//   radius: '53%',
+//   plugins: {
+//     legend: {
+//       display: true,
+//       position: 'bottom',
+//       align: 'center',
+//       padding: 20,
+//
+//       labels: {
+//         usePointStyle: true,
+//         pointStyle: 'rounded',
+//         boxWidth: 20,
+//         borderRadius: 10,
+//         pointSize: 20,
+//       },
+//     },
+//   },
+// }
+
+const doughnutData = ref({
+  labels: ['Click', 'Users', 'Active users'],
+  datasets: [
+    {
+      label: 'My First Dataset',
+      data: [] as number[],
+      backgroundColor: [
+        'rgba(122, 182, 255, 1)',
+        'rgba(  250, 190, 119, 1)',
+        'rgba(195, 122, 255, 1)',
+
+      ],
+      borderWidth: 6,
+    },
+  ],
+})
+const checkZeros = ()=>{
+ isAllZeros.value =  props.data.every(item => item === 0)
+  if(isAllZeros.value || props.isError){
     isChartDisplay.value = false
   } else{
-  await nextTick()
-  if (doughnutChart.value ) {
     isChartDisplay.value = true
-    doughnutChartInstance = new  Chart<'doughnut', number[], string>(
+    doughnutData.value.datasets[0].data = props.data
+    nextTick(()=>{
+      renderChart()
+    })
+
+  }
+}
+
+// just waiting for the DOM to be fully updated before the chartJs lib accesses the canvas element
+const renderChart = () => {
+  if( doughnutChartInstance.value){
+    doughnutChartInstance.value.destroy()
+  }
+  else{
+  if (doughnutChart.value) {
+    doughnutChartInstance.value = new Chart<'doughnut', number[], string>(
       doughnutChart.value as HTMLCanvasElement,
       {
         type: 'doughnut',
-        data: props.chartData,
-        options: props.chartOptions
+        data: doughnutData.value,
+        options: {
+          responsive: true,
+          cutout: '75%',
+          radius: '46%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              align: 'center',
+              // paddingInline: 20,
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'rounded',
+                boxWidth: 20,
+                borderRadius: 10,
+              },
+            },
+          },
+        }
       },
     )
   }
-  }
+}
 }
 
 // create the chart when the component is mounted
 onMounted(() => {
-  renderChart()
+checkZeros()
 })
 
 // If the props get to change then update the chart
 watch(
-  () => props.chartData,
-  value => {
-    if (doughnutChartInstance) {
-      doughnutChartInstance.data = value
-      doughnutChartInstance.update()
-    }
+  () => props.data,
+  () => {
+    nextTick(() => {
+      checkZeros()
+    })
   },
 )
 </script>
 
 <template>
-  <div>
-    <span class="text-responsive d-flex justify-content-center border-bottom p-3">Total View Performance</span>
+  <div style="margin-bottom: 0; padding-bottom: 0;">
+    <span class="text-responsive d-flex justify-content-center border-bottom p-3 text-nowrap">Total View Performance</span>
     <div v-if="!isChartDisplay">
       <div
         class="d-flex align-items-center justify-content-center"
@@ -77,7 +133,7 @@ watch(
             style="width: 150px"
           />
           <span
-            v-if="isZeros"
+            v-if="isAllZeros"
             class="text-gray-600 w-75 text-sm text-center pt-4"
           >
         You have no community count yet for performance analysis. Please generate
@@ -90,10 +146,9 @@ watch(
           >
         </div>
       </div>
-
     </div>
-    <div v-else>
-      <canvas ref="doughnutChart"  width="100%" height="30"></canvas>
+    <div v-else class="">
+      <canvas ref="doughnutChart"></canvas>
     </div>
   </div>
 </template>

@@ -33,7 +33,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
     }
 
 
-    async function getAffiliateLink() {
+    async function generateAffiliateLink() {
       const authStore = useAuthStore()
       console.log(authStore.token)
       try {
@@ -106,12 +106,31 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           mode: 'cors'
         })
 
-        const resp = await response.json()
-        // console.log(resp)
-        return resp
-
+        if(!response.ok){
+          return {
+            result: false,
+            data: null
+          }
+        } else {
+          const resp = await response.json()
+          return {
+            result: true,
+            data: resp.data
+            // data: {
+            //   clicks: 120,
+            //   affiliateUsers: 45,
+            //   activeUsers: 30,
+            //   totalCommunitySavings: 50000.00,
+            //   userEarnings: 15000.00,
+            //   affiliateEarnings: 10000.00
+            // }
+          }
+        }
       } catch (error) {
-        console.log(error)
+        return {
+          result: false,
+          data: null
+        }
       }
     }
 
@@ -137,29 +156,29 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
 
           return {
             result: true,
-            data: {
-              ...stats.data
-            }
             // data: {
-            // affiliateEarning: [
-            //   {amount: 0, duration: 'Monday'},
-            //   {amount: 0, duration: 'Tuesday'},
-            //   {amount: 0, duration: 'Wednesday'},
-            //   {amount: 0, duration: 'Thursday'},
-            //   {amount: 0, duration: 'Friday'},
-            //   {amount: 0, duration: 'Saturday'},
-            //   {amount: 0, duration: 'Sunday'}
-            // ],
-            // userEarning: [
-            //     {amount: 0, duration: 'Monday'},
-            //     {amount: 0, duration: 'Tuesday'},
-            //     {amount: 0, duration: 'Wednesday'},
-            //     {amount: 0, duration: 'Thursday'},
-            //     {amount: 0, duration: 'Friday'},
-            //     {amount: 0, duration: 'Saturday'},
-            //     {amount: 0, duration: 'Sunday'}
-            //   ]
-            //   }
+            //   ...stats.data
+            // }
+            data: {
+            affiliateEarning: [
+              {amount: 0, duration: 'Monday'},
+              {amount: 200, duration: 'Tuesday'},
+              {amount: 400, duration: 'Wednesday'},
+              {amount: 0, duration: 'Thursday'},
+              {amount: 100, duration: 'Friday'},
+              {amount: 150, duration: 'Saturday'},
+              {amount: 0, duration: 'Sunday'}
+            ],
+            userEarning: [
+                {amount: 0, duration: 'Monday'},
+                {amount: 0, duration: 'Tuesday'},
+                {amount: 40780, duration: 'Wednesday'},
+                {amount: 0, duration: 'Thursday'},
+                {amount: 20000, duration: 'Friday'},
+                {amount: 1490, duration: 'Saturday'},
+                {amount: 0, duration: 'Sunday'}
+              ]
+              }
             // data: []
 
           }
@@ -195,7 +214,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
             // {clickCount: 0, createdAt: 'Thursday'},
             // {clickCount: 0, createdAt: 'Friday'},
             // {clickCount: 0, createdAt: 'Saturday'},
-            // {clickCount: 0, createdAt: 'Sunday'}
+            // {clickCount: 0, createdAt: 'Sunday'},
             // {clickCount: 0, createdAt: 'Monday'},
             // {clickCount: 4, createdAt: 'Tuesday'},
             // {clickCount: 5, createdAt: 'Wednesday'},
@@ -372,15 +391,15 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
         console.log(authStore.token)
         if (resp.result === 'success') {
           return {
-            // data: resp.data
-            data: [
+            data: resp.data
+            // data: [
               // {gender: 'Male', number: 20},
               // {gender: 'Female', number: 10},
-              // {gender: 'Other', number: 5}
-              {gender: 'Male', number: 0},
-              {gender: 'Female', number: 0},
-              {gender: 'Other', number: 0}
-            ]
+              // {gender: 'Other', number: 5},
+            //   {gender: 'Male', number: 0},
+            //   {gender: 'Female', number: 0},
+            //   {gender: 'Other', number: 0}
+            // ]
           }
         } else {
           return {
@@ -409,9 +428,9 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
         const resp = await response.json()
         if(resp.result === 'success'){
           return {
-            // data: resp.data
+            data: resp.data
             // data: null
-            data: [
+            // data: [
               // {
               //   ageRange: "Below 20",
               //   number: 10
@@ -437,31 +456,31 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
               //   number: 2
               // }
               //
-              {
-                ageRange: "Below 20",
-                number: 0
-              },
-              {
-                ageRange: "20-29",
-                number: 0
-              },
-              {
-                ageRange: "30-39",
-                number: 0
-              },
-              {
-                ageRange: "40-49",
-                number: 0
-              },
-              {
-                ageRange: "50-59",
-                number: 0
-              },
-              {
-                ageRange: "60 and above",
-                number: 0
-              }
-            ]
+              // {
+              //   ageRange: "Below 20",
+              //   number: 0
+              // },
+              // {
+              //   ageRange: "20-29",
+              //   number: 0
+              // },
+              // {
+              //   ageRange: "30-39",
+              //   number: 0
+              // },
+              // {
+              //   ageRange: "40-49",
+              //   number: 0
+              // },
+              // {
+              //   ageRange: "50-59",
+              //   number: 0
+              // },
+              // {
+              //   ageRange: "60 and above",
+              //   number: 0
+              // }
+            // ]
           }
         }else{
           return {
@@ -493,21 +512,70 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           const resp = await response.json()
           return {
             data: {
-
+              bestPerformingDay: {
+                createdAt: resp.data.bestPerformingDay.createdAt,
+                amount: resp.data.bestPerformingDay.amount
+              },
+              bestPerformingMonth: {
+                createdAt: resp.data.bestPerformingMonth.createdAt,
+                amount: resp.data.bestPerformingMonth.amount
+              },
+              // "bestPerformingDay": {
+              //   "createdAt": "2024-06-15",
+              //   "amount": 100.0
+              // },
+              // "bestPerformingMonth": {
+              //   "createdAt": "2024-06-01",
+              //   "amount": 500.0
+              // }
             }
-
           }
-        }
+        } else{
+            return {
+              data: null
+            }
+          }
       }
       catch(e){
-       console.error(e)
+        return {
+          data: null
+        }
+      }
+    }
+
+    async function getAffiliateLinks(){
+      const authStore = useAuthStore()
+      try {
+        const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${authStore.token}`
+          },
+          mode: 'cors'
+        })
+        if(response.ok){
+          const resp = await response.json()
+          return {
+            result: true,
+            data: resp.data
+          }
+        }
+          else {
+            return {
+              result: false,
+              data: null
+            }
+          }
+      } catch (error) {
+        console.log(error)
       }
     }
 
     return {
       openCreateLinkDialog,
       setOpenAffiliateDialog,
-      getAffiliateLink,
+      getAffiliateLink: generateAffiliateLink,
       validateAffiliateLink,
       affiliateUserPhone,
       getDashboardData,
@@ -522,7 +590,8 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
       getCommunityEarnings,
       getGender,
       getAge,
-      getHighlights
+      getHighlights,
+      getAffiliateLinks
     }
   }
 )

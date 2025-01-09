@@ -70,31 +70,35 @@ const lineData: Ref = ref({
   ],
 })
 const renderChart = () => {
-  if (refLineGraph.value) {
-    lineGraphInstance.value = new Chart(refLineGraph.value, {
-      type: 'line',
-      data: lineData.value,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: false,
-            text: 'Community Savings Vs Affiliate Earning',
+  nextTick(()=>{
+    if (refLineGraph.value) {
+      lineGraphInstance.value = new Chart(refLineGraph.value, {
+        type: 'line',
+        data: lineData.value,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: false,
+              text: 'Community Savings Vs Affiliate Earning',
+            },
+            // scales: {
+            //   y: {
+            //     title: {
+            //       display: true,
+            //       text: 'Amount in Ksh',
+            //     },
+            //     beginAtZero: true,
+            //   },
+            // },
           },
-          // scales: {
-          //   y: {
-          //     title: {
-          //       display: true,
-          //       text: 'Amount in Ksh',
-          //     },
-          //     beginAtZero: true,
-          //   },
-          // },
         },
-      },
-    })
-  }
+      })
+    }
+
+  })
+
 }
 
 
@@ -251,27 +255,11 @@ const getDeposits = (selectedPeriod: Period) => {
     }})
 }
 
-interface Earning {
-  EarningAmount: number
-  duration: string
-}
 const getEarnings = (selectedPeriod: Period) => {
   data.value = []
   affiliateStore.getCommunityEarnings(selectedPeriod)
     .then(response => {
       if (response.data) {
-        // console.log('Community!!', response.data)
-        // response.data.map((earning: Partial<Earning>) => {
-        //   lineData.value.datasets[0].data?.push(earning.EarningAmount as number)
-        //   if (data.value?.every(value => value === 0)) {
-        //     isChartDisplay.value = false
-        //     isZeroValues.value = true
-        //     image.value = '/images/statistics-earning.png'
-        //   } else {
-        //     isChartDisplay.value = true
-        //     generateLabels(selectedPeriod)
-        //   }
-        // })
         for (let i = 0; i < response.data.length; i++) {
           lineData.value.datasets[0].data?.push(response.data[i].earningAmount)
         }
@@ -368,7 +356,7 @@ onMounted(() => {
           <img
             :src="image"
             :alt="`${props.activeTab.label} image`"
-            style="width: 150px"
+            style="width: 250px"
           />
           <span v-if="isZeroValues && props.activeTab.label === 'Clicks'" class="text-gray-600 w-75 text-sm text-center"
           >You have no click count yet. Please generate affiliate link and share
@@ -378,13 +366,13 @@ onMounted(() => {
           >You have no community count yet. Please generate affiliate link, share
           and ask your community to create Habahaba account</span
           >
-          <span v-if="isZeroValues && props.activeTab.label === 'Deposits' || props.activeTab.label === 'Earning'" class="text-gray-600 w-75 text-sm text-center"
+          <span v-if="isZeroValues && props.activeTab.label === 'Deposits'" class="text-gray-600 w-75 text-sm text-center"
           >You have no deposits yet for your community. Please ask your community to activate their Habahaba account.       </span
           >
-<!--          <span v-if="isZeroValues && props.activeTab.label === 'Earning'" class="text-gray-600 w-75 text-sm text-center"-->
-<!--          >You have no click count yet. Please generate affiliate link and share-->
-<!--          with your community to increase click count</span-->
-<!--          >-->
+          <span v-if="isZeroValues && props.activeTab.label === 'Earning'" class="text-gray-600 w-75 text-sm text-center"
+          >You have no click count yet. Please generate affiliate link and share
+          with your community to increase click count</span
+          >
           <span
             v-if="isErrorFetchingData"
             class="text-gray-600 w-75 text-sm text-center"
@@ -398,4 +386,5 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

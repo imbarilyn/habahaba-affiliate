@@ -114,7 +114,7 @@ onMounted(() => {
               </div>
               <div v-else-if="!isData" class="d-flex gap-3">
                 <span class="material-icons-round fs-lg-1 fs-2 text-habahaba-950">warning</span>
-                <span class="text-habahaba-950">There is no data yet to compare, please generate the link, share and start earning</span>
+                <span class="text-habahaba-950">There is no data to compare yet, please generate the link, share and start earning</span>
               </div>
               <div v-else-if="isError" class="d-flex gap-3">
                 <span class="material-icons-round fs-lg-1 fs-2 text-habahaba-950">warning</span>
@@ -145,7 +145,7 @@ onMounted(() => {
               </div>
               <div v-else-if="!isData" class="d-flex gap-3">
                 <span class="material-icons-round fs-lg-1 fs-2 text-habahaba-950">warning</span>
-                <span class="text-habahaba-950">There is no data yet to compare, please generate the link, share and start earning</span>
+                <span class="text-habahaba-950">There is no data to compare yet, please generate the link, share and start earning</span>
               </div>
               <div v-else-if="isError" class="d-flex gap-3">
                 <span class="material-icons-round fs-lg-1 fs-2 text-habahaba-950">warning</span>
@@ -160,7 +160,7 @@ onMounted(() => {
           <p class="fs-5">Community Gender</p>
           <PieChart />
         </div>
-        <div class="col-lg bg-white smooth-rounded py-2">
+        <div class="col-lg bg-white smooth-rounded py-2 p-3">
           <p class="fs-5">Community Age</p>
           <div>
             <BarChart />
