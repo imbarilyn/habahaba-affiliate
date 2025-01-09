@@ -22,206 +22,49 @@ export interface LineGraphData {
 
 const affiliateStore = useAffiliateStore()
 const authStore = useAuthStore()
-const notificationStore = useNotificationsStore()
-const selectedLineChartTab: Ref<string> = ref('daily')
-const doughnutData = reactive({
-  labels: ['Click', 'Users', 'Active users'],
-  datasets: [
-    {
-      label: 'My First Dataset',
-      data: [300, 50, 100],
-      backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)',
-      ],
-      borderWidth: 6,
-    },
-  ],
-})
 
-const doughnutOptions = {
-  responsive: true,
-  cutout: '75%',
-  radius: '65%',
-  plugins: {
-    legend: {
-      display: true,
-      position: 'bottom',
-      align: 'center',
-      paddingInline: 20,
-      labels: {
-        usePointStyle: true,
-        pointStyle: 'rounded',
-        boxWidth: 20,
-        borderRadius: 10,
-      },
-    },
-  },
-}
-
-const labels: Ref<string[] | null> = ref(null)
-const lineData: Ref = ref({
-  datasets: [
-    {
-      label: 'Community Savings',
-      data: [4, 5, 1, 10, 32, 2, 12],
-      fill: true,
-      backgroundColor: 'rgba(  250, 190, 119, 0.75)',
-      tension: 0.4,
-      borderWidth: 1,
-      // borderColor: 'rgba(  250, 190, 119, 0.75)'
-      // 250, 190, 119
-      // 254, 238, 214,
-    },
-    {
-      label: 'Affiliate Earning',
-      data: [12, 3, 24, 7, 6, 1],
-      fill: true,
-      backgroundColor: 'rgba(122, 49, 20, 0.75)',
-      tension: 0.4,
-      borderWidth: 1,
-      // borderColor: 'rgba(122, 49, 20, 0.75)'
-    },
-  ],
-})
-//
-// const scalesText = computed(() => {
-//   if (selectedLineChartTab.value === 'daily') {
-//     return 'Days'
-//   } else if (selectedLineChartTab.value === 'weekly') {
-//     return 'Weeks'
-//   } else {
-//     return 'Months'
-//   }
-// })
-// const lineOptions = {
-//   responsive: true,
-//   plugins: {
-//     title: {
-//       display: true,
-//       text: 'Community Savings Vs Affiliate Earning',
-//     },
-//     scales: {
-//       x: {
-//         display: true,
-//         text: scalesText.value,
-//       },
-//       y: {
-//         display: true,
-//         text: 'Amount in Ksh',
-//       },
-//     },
-//   },
-// }
 const dashboardData = ref({
-  activeUsers: 0,
-  affiliateReturn: 0,
+  clicks: 0,
   affiliateUsers: 0,
+  activeUsers: 0,
   totalCommunitySavings: 0,
-  userReturn: 0,
+  userEarnings: 0,
+  affiliateEarnings: 0
 })
 
+const doughnutData = ref<number []>([])
+const isFetchingData = ref(true)
 
-
+const isError = ref(false)
 onMounted(() => {
-  handleChartData()
   affiliateStore
     .getDashboardData(authStore.token)
     .then(res => {
-      if (res.result === 'ok') {
+      if (res.result && res.data) {
         dashboardData.value = {
-          activeUsers: res.data.activeUsers,
-          affiliateReturn: res.data.affiliateEarnings,
+          clicks: res.data.clicks,
           affiliateUsers: res.data.affiliateUsers,
+          activeUsers: res.data.activeUsers,
           totalCommunitySavings: res.data.totalCommunitySavings,
-          userReturn: res.data.userEarnings,
+          userEarnings: res.data.userEarnings,
+          affiliateEarnings: res.data.affiliateEarnings
         }
+        doughnutData.value = [res.data.clicks, res.data.affiliateUsers, res.data.activeUsers]
+        // doughnutData.value = [0, 0, 0]
+        console.log(doughnutData.value)
+
       } else {
-        notificationStore.addNotification(
-          'There is an error fetching data',
-          'error',
-        )
+       isError.value = true
       }
     })
     .catch(err => {
       console.log(err)
-      notificationStore.addNotification(
-        'There is an error fetching data',
-        'error',
-      )
+      isError.value = true
     })
-})
+    .finally(()=>{
+      isFetchingData.value = false
 
-
-
-const lineGraphData = ref<LineGraphData>()
-
-const handleChartData = () => {
-  affiliateStore
-    .getStatistics(selectedLineChartTab.value)
-    .then(resp => {
-      if (resp.result) {
-        lineGraphData.value = { ...resp.data }
-        // console.log(lineGraphData.value)
-        switch (selectedLineChartTab.value) {
-          case 'daily':
-            labels.value = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            break
-          case 'weekly':
-            labels.value = ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4']
-            break
-          default:
-            labels.value = [
-              'Jan',
-              'Feb',
-              'Mar',
-              'Apr',
-              'May',
-              'Jun',
-              'Jul',
-              'Aug',
-              'Sep',
-              'Oct',
-              'Nov',
-              'Dec',
-            ]
-            break
-        }
-      } else {
-        notificationStore.addNotification(
-          'There is an error fetching data',
-          'error',
-        )
-      }
     })
-    .catch(error => {
-      console.error(error)
-      notificationStore.addNotification(
-        'There is an error fetching data',
-        'error',
-      )
-    })
-}
-const lineChartTabs = ['daily', 'weekly', 'monthly'] as string[]
-
-const selectLineChartTab = (tab: string) => {
-  if (selectedLineChartTab.value === tab) {
-    return
-  } else {
-    selectedLineChartTab.value = tab
-    handleChartData()
-  }
-}
-
-watch(labels, newLabels => {
-  if (newLabels && newLabels.length > 0) {
-    // console.log('Line graph labels--',newLabels)
-    lineData.value.labels = newLabels
-  }
-})
-const isLineGraphLabelsAvailable = computed(() => {
-  return labels.value && labels.value.length > 0 && lineGraphData.value
 })
 </script>
 <template>
