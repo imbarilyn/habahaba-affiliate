@@ -48,10 +48,13 @@ onMounted(()=>{
   // modal.addEventListener('hidden.bs.modal', hanldeModalHidden)
 })
 
-// onBeforeUnmount(()=>{
-//   const modal = Modal.getInstance(document.getElementById(props.modalId) as HTMLElement)
-//   modal.removeEventListener('hidden.bs.modal', hanldeModalHidden)
-// })
+const emits = defineEmits<{
+  (event: 'showDialog', value: boolean): void
+}>()
+const closeModal = () => {
+  emits('showDialog', false)
+  modal.value?.hide()
+}
 
 
 
