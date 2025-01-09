@@ -24,6 +24,19 @@ const isChartDisplay = ref(false)
 const isZeros = computed(()=>{
   return  props.chartData.datasets[0].data.every((value: number)=> value === 0)
 })
+const checkZeros = ()=>{
+ isAllZeros.value =  props.data.every(item => item === 0)
+  if(isAllZeros.value || props.isError){
+    isChartDisplay.value = false
+  } else{
+    isChartDisplay.value = true
+    doughnutData.value.datasets[0].data = props.data
+    nextTick(()=>{
+      renderChart()
+    })
+
+  }
+}
 
 // just waiting for the DOM to be fully updated before the chartJs lib accesses the canvas element
 const renderChart = async () => {
