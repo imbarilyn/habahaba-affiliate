@@ -29,23 +29,8 @@ const displayModal = () => {
   modal.show()
 }
 
-const hideModal = () => {
-  affiliateStore.setOpenAffiliateDialog(false)
-  const modal = Modal.getInstance(document.getElementById(props.modalId) as HTMLElement)
-  modal?.hide()
-
-}
-// const hanldeModalHidden = () => {
-//   affiliateStore.setOpenAffiliateDialog(false)
-// }
 onMounted(()=>{
-    if (props.showModal) {
-      displayModal()
-    } else {
-      return
-    }
-  // const modal = Modal.getInstance(document.getElementById(props.modalId) as HTMLElement)
-  // modal.addEventListener('hidden.bs.modal', hanldeModalHidden)
+  displayModal()
 })
 
 const emits = defineEmits<{
