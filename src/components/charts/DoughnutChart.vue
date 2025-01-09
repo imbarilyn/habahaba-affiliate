@@ -66,19 +66,36 @@ const checkZeros = ()=>{
 }
 
 // just waiting for the DOM to be fully updated before the chartJs lib accesses the canvas element
-const renderChart = async () => {
-  if(isZeros.value  || props.isError){
-    isChartDisplay.value = false
-  } else{
-  await nextTick()
-  if (doughnutChart.value ) {
-    isChartDisplay.value = true
-    doughnutChartInstance = new  Chart<'doughnut', number[], string>(
+const renderChart = () => {
+  if( doughnutChartInstance.value){
+    doughnutChartInstance.value.destroy()
+  }
+  else{
+  if (doughnutChart.value) {
+    doughnutChartInstance.value = new Chart<'doughnut', number[], string>(
       doughnutChart.value as HTMLCanvasElement,
       {
         type: 'doughnut',
-        data: props.chartData,
-        options: props.chartOptions
+        data: doughnutData.value,
+        options: {
+          responsive: true,
+          cutout: '75%',
+          radius: '46%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              align: 'center',
+              // paddingInline: 20,
+              labels: {
+                usePointStyle: true,
+                pointStyle: 'rounded',
+                boxWidth: 20,
+                borderRadius: 10,
+              },
+            },
+          },
+        }
       },
     )
   }
