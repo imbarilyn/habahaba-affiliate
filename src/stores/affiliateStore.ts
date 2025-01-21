@@ -156,29 +156,29 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
 
           return {
             result: true,
-            // data: {
-            //   ...stats.data
-            // }
             data: {
-            affiliateEarning: [
-              {amount: 0, duration: 'Monday'},
-              {amount: 200, duration: 'Tuesday'},
-              {amount: 400, duration: 'Wednesday'},
-              {amount: 0, duration: 'Thursday'},
-              {amount: 100, duration: 'Friday'},
-              {amount: 150, duration: 'Saturday'},
-              {amount: 0, duration: 'Sunday'}
-            ],
-            userEarning: [
-                {amount: 0, duration: 'Monday'},
-                {amount: 0, duration: 'Tuesday'},
-                {amount: 40780, duration: 'Wednesday'},
-                {amount: 0, duration: 'Thursday'},
-                {amount: 20000, duration: 'Friday'},
-                {amount: 1490, duration: 'Saturday'},
-                {amount: 0, duration: 'Sunday'}
-              ]
-              }
+              ...stats.data
+            }
+            // data: {
+            // affiliateEarning: [
+            //   {amount: 0, duration: 'Monday'},
+            //   {amount: 200, duration: 'Tuesday'},
+            //   {amount: 400, duration: 'Wednesday'},
+            //   {amount: 0, duration: 'Thursday'},
+            //   {amount: 100, duration: 'Friday'},
+            //   {amount: 150, duration: 'Saturday'},
+            //   {amount: 0, duration: 'Sunday'}
+            // ],
+            // userEarning: [
+            //     {amount: 0, duration: 'Monday'},
+            //     {amount: 0, duration: 'Tuesday'},
+            //     {amount: 40780, duration: 'Wednesday'},
+            //     {amount: 0, duration: 'Thursday'},
+            //     {amount: 20000, duration: 'Friday'},
+            //     {amount: 1490, duration: 'Saturday'},
+            //     {amount: 0, duration: 'Sunday'}
+            //   ]
+            //   }
             // data: []
 
           }
@@ -575,7 +575,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
     return {
       openCreateLinkDialog,
       setOpenAffiliateDialog,
-      getAffiliateLink: generateAffiliateLink,
+      generateAffiliateLink,
       validateAffiliateLink,
       affiliateUserPhone,
       getDashboardData,
