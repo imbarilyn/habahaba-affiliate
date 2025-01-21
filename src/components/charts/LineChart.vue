@@ -183,46 +183,48 @@ onMounted(() => {
 </script>
 
 <template>
-      <div class="d-flex gap-1 pb-3">
-        <div v-for="(tab, index) in lineChartTabs" :key="index" class="">
-          <span
-            class="btn rounded-pill"
-            :class="[
-              selectedLineChartTab === tab
-                ? 'btn btn-outline-habahaba-900 btn-transparent text-habahaba-900 btn-no-hover'
-                : ' btn-habahaba-900 text-white',
-            ]"
-            @click="selectLineChartTab(tab)"
-            >{{ tab }}</span
-          >
-        </div>
-      </div>
-    <div v-if="isChartDisplay">
-        <canvas ref="refLineGraph" height="130px"></canvas>
+  <div class="d-flex gap-1 pb-3">
+    <div v-for="(tab, index) in lineChartTabs" :key="index" class="">
+      <span
+        class="btn rounded-pill"
+        :class="[
+          selectedLineChartTab === tab
+            ? 'btn btn-outline-habahaba-900 btn-transparent text-habahaba-900 btn-no-hover'
+            : ' btn-habahaba-900 text-white',
+        ]"
+        @click="selectLineChartTab(tab)"
+        >{{ tab }}</span
+      >
     </div>
+  </div>
+  <div v-if="isChartDisplay">
+    <canvas ref="refLineGraph" height="130px"></canvas>
+  </div>
 
-    <div v-else class="d-flex justify-content-center pb-5 align-items-center"
-    style="height: 300px">
-      <div class="d-flex flex-column align-items-center pt-md-10 pb-5 pb-md-0">
-        <img
-          src="/images/statistics-earning.png"
-          alt="community-photo"
-          class="img"
-          :class="[isErrorFetchingData? 'pt-md-5 pb-md-3 ': '']"
-        />
-        <span
-          v-if="isZeroValues"
-          class="text-gray-600 pt-md-4 pb-5 pb-md-0  w-75 text-sm text-center"
-        >
-          You have no earnings yet to compare. Please generate the affiliate link and share with your community to start earning
-        </span>
-        <span
-          v-if="isErrorFetchingData"
-          class="text-gray-600 text-sm"
-          >Opps! No relevant data. Please try to refresh the page</span
-        >
-      </div>
+  <div
+    v-else
+    class="d-flex justify-content-center pb-5 align-items-center"
+    style="height: 300px"
+  >
+    <div class="d-flex flex-column align-items-center pt-md-10 pb-5 pb-md-0">
+      <img
+        src="/images/statistics-earning.png"
+        alt="community-photo"
+        class="img"
+        :class="[isErrorFetchingData ? 'pt-md-5 pb-md-3 ' : '']"
+      />
+      <span
+        v-if="isZeroValues"
+        class="text-gray-600 pt-md-4 pb-5 pb-md-0 w-75 text-sm text-center"
+      >
+        You have no earnings yet to compare. Please generate the affiliate link
+        and share with your community to start earning
+      </span>
+      <span v-if="isErrorFetchingData" class="text-gray-600 text-sm"
+        >Opps! No relevant data. Please try to refresh the page</span
+      >
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -230,4 +232,7 @@ onMounted(() => {
   background-color: inherit !important;
 }
 
+.img {
+  width: 250px;
+}
 </style>
