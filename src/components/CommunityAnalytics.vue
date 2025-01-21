@@ -115,8 +115,8 @@ const setActiveTab = (position: number) => {
         {{selectedPeriod.name}}
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li  v-for="(period, index) in periods" :key="index" @click="handlePeriod(period.id)">
-          <a class="dropdown-item">{{period.name}}</a>
+        <li  v-for="(period, index) in periods" :key="index" @click="handlePeriod(period.id)" class="cursor-pointer">
+          <a class="dropdown-item cursor-pointer">{{period.name}}</a>
         </li>
       </ul>
     </div>
