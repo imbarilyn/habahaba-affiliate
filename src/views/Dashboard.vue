@@ -44,7 +44,7 @@ const generateLink = () => {
   console.log('generating link')
   showSpinner.value = true
   affiliateStore
-    .getAffiliateLink()
+    .generateAffiliateLink()
     .then(resp => {
       console.log(resp.data)
       if (resp.result === 'ok') {
@@ -61,8 +61,8 @@ const generateLink = () => {
         )
       }
     })
-    .catch(err => {
-      console.log(err)
+    .catch(() => {
+      // console.log(err)
       notificationsStore.addNotification(
         'Error generating affiliate link',
         'error',
@@ -535,7 +535,7 @@ const handleTransaction = ()=>{
                 data-bs-target="#collapseLayouts"
                 aria-expanded="false"
                 aria-controls="collapseLayouts"
-                @click="tabStore.setActiveTab('viewLink')"
+                @click="createLink"
                 :class="[[tabStore.activeTab === 'viewLink'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
               >
                 <div class="nav-link-icon">
