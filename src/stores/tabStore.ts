@@ -12,7 +12,7 @@ export const useTabStore = defineStore({
       'createLink',
       'viewLink'
     ] as string[],
-    activeTab: 'overview' as string
+    activeTab: localStorage.getItem('activeTab' || 'overview' ) as string
   }),
 
   getters: {
@@ -24,6 +24,7 @@ export const useTabStore = defineStore({
     setActiveTab(tab: string){
       if(this.tabs.includes(tab)){
         this.activeTab = tab
+        localStorage.setItem('activeTab', tab)
       }
       else{
         console.log(`${tab} not found`)
