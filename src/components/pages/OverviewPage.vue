@@ -269,7 +269,7 @@ onMounted(() => {
                     <p>Recent Transaction</p>
                     <span class="material-icons-outlined"> more_horiz </span>
                   </div>
-                  <Payouts />
+                  <AffiliateTransaction />
                 </div>
               </div>
             </div>
