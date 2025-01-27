@@ -38,12 +38,11 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
   const user = useStorage('af-user', '')
   const getIsLoggedIn = computed(()=>isLoggedIn.value)
   const getToken = computed(()=>token.value)
+  const everLoggedIn = useStorage('af-ever-logged-in', false)
   const userIsLoggedIn = computed(()=>{
     const expiry = moment.unix(Number(tokenExpiry.value)).utc()
     const now = moment().utc()
     const isValid = token.value && expiry.isAfter(now)
-    console.log('token', token.value)
-    console.log('expiry', tokenExpiry.value)
     if(!isValid){
       logout()
     }
@@ -128,11 +127,16 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     }
   }
 
+  const setEverLoggedIn = ()=>{
+    everLoggedIn.value = true
+  }
+
   function setToken (value: string){
    try{
      token.value = value
+     setEverLoggedIn()
    }catch(error){
-      console.log(error)
+     return
    }
 
   }
@@ -166,5 +170,6 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     getToken,
     getIsLoggedIn,
     token,
+    everLoggedIn
   }
 })
