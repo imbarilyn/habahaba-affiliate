@@ -56,49 +56,33 @@ watch(
 // We first validate the link and if the  link is valid we load the page
 const isAppLoading = ref(true)
 const isAffiliateLinkValid = ref(false)
-onMounted(()=>{
-  affiliateStore.validateAffiliateLink(props.referrer)
-    .then(resp=>{
-      if(resp.result === 'ok'){
+onMounted(() => {
+  affiliateStore
+    .validateAffiliateLink(props.referrer)
+    .then(resp => {
+      if (resp.result === 'ok') {
         isAffiliateLinkValid.value = true
-      }
-      else{
-        // showAlert({
-        //   title: 'Registration successful',
-        //   text: 'The app download link has been sent to your phone number',
-        //   icon: 'success',
-        //   allowOutsideClick: false
-        // })
-        // notificationStore.addNotification('Invalid affiliate link', 'error')
-showAlert({
-  type: 'error',
-  message: 'An error occurred, please try again later'
-
-})
+      } else {
+        showAlert({
+          type: 'error',
+          message: resp.message,
+        })
       }
     })
-    .catch(err=>{
+    .catch(err => {
       console.log(err)
       showAlert({
-        // title: 'Registration successful',
-        // text: 'A link for app download has been sent to your phone number',
-        // icon: 'success',
-        // allowOutsideClick: false
         type: 'error',
-        message: 'An error occurred, please try again later'
-
+        message: 'An error occurred, please try again later',
       })
     })
-    .finally(()=> {
+    .finally(() => {
       isAppLoading.value = false
     })
-
-
 })
 
 const isLoading = ref(false)
 const handleLogin = () => {
-  // console.log(affiliatePayload)
   if (phoneNoMeta.validated && phoneNoMeta.valid) {
     isLoading.value = true
     affiliateStore
@@ -107,19 +91,20 @@ const handleLogin = () => {
         code: props.referrer,
       })
       .then(resp => {
+        console.log(resp)
         if (resp.result === 'ok') {
           showAlert({
             type: 'success',
-            message:
-              'Registration successful please check your phone for the app download link',
+            message: resp.message,
           })
-          // notificationStore.addNotification('Registration successful', 'success')
+          setTimeout(()=>{
+            window.open(resp.link, '_blank')
+          }, 1000)
         } else {
           showAlert({
             type: 'error',
-            message: 'An error occurred, please try again later',
+            message: resp.message
           })
-          // notificationStore.addNotification('An error occurred, please try again', 'error')
         }
       })
       .catch(err => {
@@ -128,7 +113,6 @@ const handleLogin = () => {
           type: 'error',
           message: 'An error occurred, please try again later',
         })
-        // notificationStore.addNotification('An error occurred, please try again', 'error')
       })
       .finally(() => {
         isLoading.value = false
@@ -145,18 +129,20 @@ const handleLogin = () => {
 <template>
   <div
     v-if="isAffiliateLinkValid"
-    class="bg-habahaba-500 d-flex md-align-items-center "
+    class="bg-habahaba-500 d-flex md-align-items-center"
     style="height: 100vh"
   >
     <div class="row w-100">
-      <div class="col-md col-12 d-flex justify-content-center align-items-center">
+      <div
+        class="col-md col-12 d-flex justify-content-center align-items-center"
+      >
         <div>
-          <img src="/images/referrer.png" alt="savings"
-               class="width-size"
-          />
+          <img src="/images/referrer.png" alt="savings" class="width-size" />
         </div>
       </div>
-      <div class="col d-flex justify-content-center align-items-start align-items-md-center ms-4">
+      <div
+        class="col d-flex justify-content-center align-items-start align-items-md-center ms-4"
+      >
         <!-- Basic login form-->
         <div class="card shadow-lg col-xl-8 col-11 border-0 rounded-lg pt-4">
           <div class="justify-content-center">
@@ -228,18 +214,16 @@ const handleLogin = () => {
   width: 500px;
 }
 
-
 @media (max-width: 576px) {
   .width-size {
     width: 200px;
   }
 }
 
-@media (min-width:576px) {
+@media (min-width: 576px) {
   .width-size {
     width: 400px;
   }
-
 }
 
 .form-width {

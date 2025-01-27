@@ -359,7 +359,7 @@ const closeAlert = () => {
 </script>
 
 <template>
-  <div class=" d-flex justify-content-center py-md-0 py-4" style="min-height: 100vh">
+  <div class="text-responsive d-flex justify-content-center py-md-0 py-4" style="min-height: 100vh">
     <div class="row  w-100 d-flex justify-content-center align-content-center" style="min-height: 100vh">
       <div
         class="col-md-6 col-12 d-flex align-items-center  justify-content-center justify-content-start"
@@ -384,19 +384,19 @@ const closeAlert = () => {
                 />
               </div>
               <div class="d-flex justify-content-center">
-                <p class="fw-light text-habahaba-500">
+                <p class="fw-light text-habahaba-500 text-nowrap">
                   Hello! Please sign up to get started
                 </p>
               </div>
             </div>
-            <div class="card-body">
+            <div class="">
               <!-- Registration form-->
               <form @submit.prevent="handleSubmit">
                 <!-- Form Row-->
 
                 <!-- Form Group (first name)-->
-                <div class="row gap-2 mb-md-3">
-                  <div class="col">
+                <div class="row gap-md-2 mb-md-3">
+                  <div class="col-12 col-md ">
                     <label class="small mb-1" for="inputFirstName"
                       >First Name</label
                     >
@@ -517,7 +517,7 @@ const closeAlert = () => {
 
                 <!-- Form Group (password)-->
                 <div class="row gap-2 mb-md-3">
-                  <div class="col mb-1.5">
+                  <div class="col-12 col-md mb-1.5">
                     <label class="small mb-1" for="inputPassword"
                       >Password</label
                     >
@@ -576,13 +576,8 @@ const closeAlert = () => {
                     class="text-decoration-none"
                     >Terms and Conditions
                   </RouterLink>
-<!--                  <small-->
-<!--                    v-if="tncMeta.validated && !tncMeta.valid"-->
-<!--                    class="d-block invalid-feedback"-->
-<!--                    >{{ tncErrorMessage }}</small-->
-<!--                  >-->
                 </div>
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex pt-2  justify-content-md-end justify-content-start mb-3">
                   <div class="small">
                     <span>Have an account?</span>
                     <RouterLink
