@@ -8,7 +8,7 @@ interface AlertType {
 export const showAlert = (alertPayload: AlertType )=>{
   if(alertPayload.type === 'success'){
     Swal.fire({
-      title: 'Success',
+      titleText: 'Success',
       text: alertPayload.message,
       icon: 'success',
       confirmButtonText: 'Okay',
@@ -18,7 +18,7 @@ export const showAlert = (alertPayload: AlertType )=>{
 
   else {
     Swal.fire({
-      title: 'Error',
+      titleText: 'Error',
       text: alertPayload.message,
       icon: 'error',
       confirmButtonText: 'Okay',
