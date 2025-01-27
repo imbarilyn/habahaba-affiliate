@@ -1,125 +1,138 @@
-import { createRouter, createWebHistory,  type RouteLocationNormalized} from 'vue-router'
-import { computed } from 'vue'
+import {
+  createRouter,
+  createWebHistory,
+  type NavigationGuardNext,
+  type RouteLocationNormalized, type RouteLocationNormalizedLoaded
+} from 'vue-router'
 import { useAuthStore } from '@/stores'
-
 
 const routes = [
   {
     name: 'Home',
     path: '/',
-    redirect: '/auth'
+    redirect: '/auth',
   },
   {
     name: 'auth',
     path: '/auth',
-    component: ()=> import('../views/auth/UsersPage.vue'),
+    component: () => import('../views/auth/UsersPage.vue'),
     children: [
       {
         name: 'user-signup',
         path: '',
-        component: ()=> import('../views/auth/SignupPage.vue')
+        component: () => import('../views/auth/SignupPage.vue'),
+        beforeEnter: (to:RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext)=>{
+          const authStore = useAuthStore()
+          if(authStore.everLoggedIn){
+            console.log('ever logged in')
+            next({
+              name: 'user-login'
+            })
+          }
+          else {
+            next()
+          }
+        }
       },
       {
         name: 'user-login',
         path: 'login',
-        component: ()=>import('../views/auth/LoginPage.vue'),
-        // component: ()=>import('../views/auth/ReferralRegister.vue'),
+        component: () => import('../views/auth/LoginPage.vue'),
       },
     ],
     meta: {
-      requiresAuth: false
-    }
+      requiresAuth: false,
+    },
+    // beforeEnter: (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext)=>{
+    //   const authStore = useAuthStore()
+    //   if(authStore.everLoggedIn){
+    //     next({
+    //       name: 'user-login'
+    //     })
+    //   }
+    //   else{
+    //     next()
+    //   }
+    // }
   },
   {
     name: 'dashboard',
     path: '/dashboard',
-    component: ()=>import('../views/Dashboard.vue'),
-    redirect: {name: 'overview'},
+    component: () => import('../views/Dashboard.vue'),
+    redirect: { name: 'overview' },
     children: [
       {
         name: 'overview',
         path: '',
-        component: ()=>import('../components/pages/OverviewPage.vue')
+        component: () => import('../components/pages/OverviewPage.vue'),
       },
       {
         name: 'statistics',
         path: 'statistics',
-        component: ()=>import('../components/pages/StatisticsPage.vue')
+        component: () => import('../components/pages/StatisticsPage.vue'),
       },
       {
         name: 'transactions',
         path: 'transactions',
-        component: ()=>import('../components/pages/TransactionsPage.vue')
-      }
+        component: () => import('../components/pages/TransactionsPage.vue'),
+      },
     ],
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
 
   {
     name: 'ReferralRegister',
     path: '/referral-register',
-    component: ()=>import('../views/auth/ReferralRegister.vue'),
-    props: (route: RouteLocationNormalized)=>{
+    component: () => import('../views/auth/ReferralRegister.vue'),
+    props: (route: RouteLocationNormalizedLoaded) => {
       const { query } = route
       return {
-        referrer: query.referrer
+        referrer: query.referrer,
       }
     },
     meta: {
-      requiresAuth: false
-    }
+      requiresAuth: false,
+    },
   },
   {
     name: 'tncs',
     path: '/term-and-conditions',
-    component: ()=>import('../components/TNCPage.vue'),
+    component: () => import('../components/TNCPage.vue'),
     meta: {
-      requiresAuth: false
-    }
+      requiresAuth: false,
+    },
   },
   {
     name: 'not-found',
     path: '/:pathMatch(.*)*',
-    component: ()=>import('../views/NotFoundPage.vue'),
+    component: () => import('../views/NotFoundPage.vue'),
     meta: {
-      requiresAuth: false
-    }
-
-
-  }
+      requiresAuth: false,
+    },
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
-router.beforeEach((to, from, next)=>{
+router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const requiresAuth = to.meta.requiresAuth as boolean
   // const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-
-  console.log(authStore.userIsLoggedIn)
-  if(!requiresAuth){
-    console.log(requiresAuth)
-    console.log('no auth required')
+  if (!requiresAuth) {
     next()
-  }
-  else{
-    if(!authStore.userIsLoggedIn){
-      console.log('not logged in')
-      console.log(authStore.userIsLoggedIn)
+  } else {
+    if (!authStore.userIsLoggedIn) {
       next({
-        name: 'user-login'
+        name: 'user-login',
       })
-    }
-    else{
-      console.log('logged in')
+    } else {
       next()
     }
-
   }
 })
 
