@@ -167,7 +167,7 @@ const handleTransaction = ()=>{
 </script>
 
 <template>
-  <div class="nav-fixed">
+  <div class="nav-fixed overflow-x-hidden">
     <nav
       class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white"
       id="sidenavAccordion"
@@ -676,6 +676,38 @@ const handleTransaction = ()=>{
             </div>
           </div>
         </template>
+        <template #footer>
+          <div v-if="showCopyLink" class="px-3 py-4">
+            <p>Share to grow your community </p>
+            <div class="d-flex justify-content-center gap-3">
+              <div v-for="social in socialIcons" :key="social.name">
+                <div class="btn btn-sm" @click="shareLink(social.name, affiliateLink )">
+                  <img :src="social.image" :alt="`${social.name} icon`" style="width: 35px">
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </template>
+      </DialogModal>
+    </div>
+    <div v-if="isDeleteContact">
+      <DialogModal  :modal-id="linkProps.modalId"  :title="linkProps.title" @show-dialog="handelCloseContactModal">
+        <template #body>
+          <form>
+            <div class="mb-3">
+              <label for="telephone" class="form-label">Phone number</label>
+              <input v-model="deletePhone" type="text" class="form-control" id="telephone" aria-describedby="emailHelp">
+            </div>
+          </form>
+        </template>
+        <template #footer>
+          <div class="pb-4 px-3">
+            <button type="submit" class="btn btn-primary w-100" @click="deleteContact">Submit</button>
+          </div>
+
+        </template>
+
       </DialogModal>
     </div>
 
