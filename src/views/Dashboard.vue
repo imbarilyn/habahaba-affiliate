@@ -37,6 +37,30 @@ watch(showSidebar, val => {
   }
 })
 
+
+const socialIcons = [
+  {
+    name: 'facebook',
+    image: facebook
+
+  },
+  {
+    name: 'twitter',
+    image: twitter
+  },
+  {
+    name: 'whatsapp',
+    image: whatsapp
+  },
+  {
+    name: 'linkedin',
+    image: linkedin
+  },
+  {
+    name: 'email',
+    image: email
+  },
+]
 const notificationsStore = useNotificationsStore()
 
 const linkProps = {
