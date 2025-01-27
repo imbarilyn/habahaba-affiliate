@@ -228,11 +228,11 @@ onMounted(()=>{
                   class="invalid-feedback"
                   >{{ passwordErrorMessage }}</small
                 >
-                <div class="d-flex justify-content-end pt-2">
+                <div class="d-flex justify-content-end pt-2" v-if="!authStore.everLoggedIn">
                   <div class="small">
                     <span>Not a user? </span>
                     <RouterLink
-                      to="/"
+                      to="/auth"
                       class="text-decoration-none text-habahaba-500"
                       >Sign up!
                     </RouterLink>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted,  type Ref, ref} from 'vue'
-import Payouts from '@/components/PayoutComponent.vue'
 import LineChart from '@/components/charts/LineChart.vue'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import {
@@ -35,9 +34,9 @@ const dashboardData = ref({
 
 const doughnutData = ref<number []>([])
 const isFetchingData = ref(true)
-
 const isError = ref(false)
-onMounted(() => {
+
+const getDashboardData = ()=>{
   affiliateStore
     .getDashboardData(authStore.token)
     .then(res => {
@@ -55,7 +54,7 @@ onMounted(() => {
         console.log(doughnutData.value)
 
       } else {
-       isError.value = true
+        isError.value = true
       }
     })
     .catch(err => {
