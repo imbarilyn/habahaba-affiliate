@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Chart } from 'chart.js/auto'
-import { nextTick, onMounted, ref, watch, type Ref } from 'vue'
-import { isError } from 'lodash'
+import { nextTick, onMounted, ref, watch, type Ref, computed } from 'vue'
+
 
 const doughnutChart = ref<null | HTMLCanvasElement>(null)
 const doughnutChartInstance: Ref<Chart<'doughnut', number[], string> | null> =
@@ -41,7 +41,7 @@ const doughnutData = ref({
   labels: ['Click', 'Users', 'Active users'],
   datasets: [
     {
-      label: 'My First Dataset',
+      label: ' Overall Interaction',
       data: [] as number[],
       backgroundColor: [
         'rgba(122, 182, 255, 1)',
@@ -52,11 +52,15 @@ const doughnutData = ref({
     },
   ],
 })
+
+const cummulativeInteraction = computed(()=>doughnutData.value.datasets[0].data.reduce((cumulative, currentValue)=>{
+  return cumulative + currentValue
+}, 0))
+
 const checkZeros = () => {
-  if(props.isError){
+  if (props.isError) {
     return
-  }
-  else{
+  } else {
     isAllZeros.value = props.data.every(item => item === 0)
     if (isAllZeros.value || props.isError) {
       isChartDisplay.value = false
@@ -68,7 +72,6 @@ const checkZeros = () => {
       })
     }
   }
-
 }
 
 // just waiting for the DOM to be fully updated before the chartJs lib accesses the canvas element
@@ -85,7 +88,7 @@ const renderChart = () => {
           options: {
             responsive: true,
             cutout: '75%',
-            radius: '46%',
+            radius: '85%',
             plugins: {
               legend: {
                 display: true,
@@ -110,8 +113,6 @@ const renderChart = () => {
 // create the chart when the component is mounted
 onMounted(() => {
   checkZeros()
-  console.log('There is an error', props.isError)
-  console.log('Is zeros', isAllZeros.value)
 })
 
 // If the props get to change then update the chart
@@ -126,9 +127,9 @@ watch(
 </script>
 
 <template>
-  <div style="margin-bottom: 0; padding-bottom: 0">
+  <div class="text-responsive position-relative  d-flex flex-column align-items-center justify-content-center">
     <span
-      class="text-responsive d-flex justify-content-center border-bottom p-3 text-nowrap"
+      class="d-flex justify-content-center p-3 text-nowrap"
       >Total View Performance</span
     >
     <div v-if="!isChartDisplay">
@@ -157,8 +158,12 @@ watch(
         </div>
       </div>
     </div>
-    <div v-else class="">
+    <div v-else style="height: 380px; padding-top: 32px">
       <canvas ref="doughnutChart"></canvas>
+    </div>
+    <div v-if="isChartDisplay" class="position-absolute d-flex flex-column jus align-items-center">
+      <span class="text-habahaba-950 fw-500 " style="font-size: 30px">{{cummulativeInteraction}}</span>
+      <span class="text-gray-700" style="font-size: 17px">Total Interactions</span>
     </div>
   </div>
 </template>
