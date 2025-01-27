@@ -7,6 +7,8 @@ import {
   useAffiliateStore,
   useAuthStore,
 } from '@/stores'
+import AffiliateLinks from '@/components/AffiliateLinks.vue'
+import AffiliateTransaction from '@/components/AffiliateTransaction.vue'
 
 export interface LineGraphData {
   affiliateEarning: {
@@ -64,6 +66,11 @@ onMounted(() => {
       isFetchingData.value = false
 
     })
+}
+
+onMounted(() => {
+  getDashboardData()
+
 })
 </script>
 <template>
@@ -241,16 +248,16 @@ onMounted(() => {
             <p class="p-2">Revenue Summary</p>
             <LineChart/>
           </div>
-          <div class="row">
+          <div class="row  ">
             <div class="col-lg-6">
               <!-- Pie chart example-->
               <div class="bg-white smooth-rounded mb-4">
                 <div class="p-3">
                   <div class="d-flex justify-content-between">
-                    <p class="">Recent Transaction</p>
+                    <p class="">My Links</p>
                     <span class="material-icons-outlined"> more_horiz </span>
                   </div>
-                  <Payouts />
+                  <AffiliateLinks />
                 </div>
               </div>
             </div>

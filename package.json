@@ -8,7 +8,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "clear-pub": "rm -rfv public/assets/*.js public/assets/*.css",
     "sync-pub": "rsync -av --progress dist/ public/",
-    "zip-pub": "rm -rfv habahaba-affiliate1.zip && zip -rv habahaba-affiliate1.zip public",
+    "zip-pub": "rm -rfv habahaba-affiliate3.zip && zip -rv habahaba-affiliate3.zip public",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
