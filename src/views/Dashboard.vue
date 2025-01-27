@@ -9,6 +9,16 @@ import {
 import DialogModal from '@/components/DialogModal.vue'
 import { useRouter } from 'vue-router'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import whatsapp  from '/images/whatsapp.png'
+import facebook from  '/images/facebook.png'
+import twitter from '/images/twitter.png'
+import email from '/images/email3.png'
+import linkedin from '/images/linkedin.png'
+import {shareToSocials} from '@/modules/share'
+import { showAlert } from '@/modules/popup'
+
+
+
 
 const affiliateStore = useAffiliateStore()
 const authStore = useAuthStore()

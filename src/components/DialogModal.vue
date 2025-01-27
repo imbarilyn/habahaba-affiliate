@@ -59,7 +59,7 @@ const closeModal = () => {
             {{ body }}
           </slot>
         </div>
-        <div class="modal-footer">
+        <div class="">
           <slot name="footer">
           </slot>
         </div>
