@@ -77,7 +77,6 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
     }
 
     async function affiliateUserPhone(affiliateUserPayload: AffiliateUserPayload) {
-      console.log(affiliateUserPayload)
       try {
         const response = await fetch(`${BASE_URL}/affiliate-user/submit-phone/`, {
           method: 'POST',
@@ -87,11 +86,22 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           mode: 'cors',
           body: JSON.stringify(affiliateUserPayload)
         })
-        const resp = await response.json()
-        console.log(resp)
-        return resp
+        const res = await response.json()
+        if (!response.ok) {
+          return {
+            result: 'fail',
+            message: res.message
+          }
+        } else {
+          return res
+        }
+
       } catch (error) {
-        console.log(error)
+        console.log('Catch error')
+        return {
+          result: 'fail',
+          message: 'An error occurred while trying to submit phone number'
+        }
       }
     }
 
@@ -106,7 +116,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           mode: 'cors'
         })
 
-        if(!response.ok){
+        if (!response.ok) {
           return {
             result: false,
             data: null
@@ -393,9 +403,9 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           return {
             data: resp.data
             // data: [
-              // {gender: 'Male', number: 20},
-              // {gender: 'Female', number: 10},
-              // {gender: 'Other', number: 5},
+            // {gender: 'Male', number: 20},
+            // {gender: 'Female', number: 10},
+            // {gender: 'Other', number: 5},
             //   {gender: 'Male', number: 0},
             //   {gender: 'Female', number: 0},
             //   {gender: 'Other', number: 0}
@@ -426,68 +436,68 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           }
         })
         const resp = await response.json()
-        if(resp.result === 'success'){
+        if (resp.result === 'success') {
           return {
             data: resp.data
             // data: null
             // data: [
-              // {
-              //   ageRange: "Below 20",
-              //   number: 10
-              // },
-              // {
-              //   ageRange: "20-29",
-              //   number: 20
-              // },
-              // {
-              //   ageRange: "30-39",
-              //   number: 15
-              // },
-              // {
-              //   ageRange: "40-49",
-              //   number: 10
-              // },
-              // {
-              //   ageRange: "50-59",
-              //   number: 5
-              // },
-              // {
-              //   ageRange: "60 and above",
-              //   number: 2
-              // }
-              //
-              // {
-              //   ageRange: "Below 20",
-              //   number: 0
-              // },
-              // {
-              //   ageRange: "20-29",
-              //   number: 0
-              // },
-              // {
-              //   ageRange: "30-39",
-              //   number: 0
-              // },
-              // {
-              //   ageRange: "40-49",
-              //   number: 0
-              // },
-              // {
-              //   ageRange: "50-59",
-              //   number: 0
-              // },
-              // {
-              //   ageRange: "60 and above",
-              //   number: 0
-              // }
+            // {
+            //   ageRange: "Below 20",
+            //   number: 10
+            // },
+            // {
+            //   ageRange: "20-29",
+            //   number: 20
+            // },
+            // {
+            //   ageRange: "30-39",
+            //   number: 15
+            // },
+            // {
+            //   ageRange: "40-49",
+            //   number: 10
+            // },
+            // {
+            //   ageRange: "50-59",
+            //   number: 5
+            // },
+            // {
+            //   ageRange: "60 and above",
+            //   number: 2
+            // }
+            //
+            // {
+            //   ageRange: "Below 20",
+            //   number: 0
+            // },
+            // {
+            //   ageRange: "20-29",
+            //   number: 0
+            // },
+            // {
+            //   ageRange: "30-39",
+            //   number: 0
+            // },
+            // {
+            //   ageRange: "40-49",
+            //   number: 0
+            // },
+            // {
+            //   ageRange: "50-59",
+            //   number: 0
+            // },
+            // {
+            //   ageRange: "60 and above",
+            //   number: 0
+            // }
             // ]
           }
-        }else{
+        } else {
           return {
             data: null
           }
         }
-      } catch(error){
+      } catch (error) {
         console.log(error)
         return {
           data: null
@@ -497,10 +507,10 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
     }
 
 
-    async function getHighlights(){
+    async function getHighlights() {
       const authStore = useAuthStore()
       try {
-        const response = await fetch( `${BASE_URL}/affiliate/statistics/highlights`, {
+        const response = await fetch(`${BASE_URL}/affiliate/statistics/highlights`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -508,7 +518,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           }
         })
         // return await response.json()
-        if(response.ok){
+        if (response.ok) {
           const resp = await response.json()
           return {
             data: {
@@ -519,7 +529,7 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
               bestPerformingMonth: {
                 createdAt: resp.data.bestPerformingMonth.createdAt,
                 amount: resp.data.bestPerformingMonth.amount
-              },
+              }
               // "bestPerformingDay": {
               //   "createdAt": "2024-06-15",
               //   "amount": 100.0
@@ -530,23 +540,81 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
               // }
             }
           }
-        } else{
-            return {
-              data: null
-            }
+        } else {
+          return {
+            data: null
           }
-      }
-      catch(e){
+        }
+      } catch (e) {
         return {
           data: null
         }
       }
     }
 
-    async function getAffiliateLinks(){
-      const authStore = useAuthStore()
+    // async function getAffiliateLinks() {
+    //   const authStore = useAuthStore()
+    //   try {
+    //     const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `${authStore.token}`
+    //       },
+    //       mode: 'cors'
+    //     })
+    //     if (response.ok) {
+    //       const resp = await response.json()
+    //       return {
+    //         result: true,
+    //         data: resp.data
+    //       }
+    //     } else {
+    //       return {
+    //         result: false,
+    //         data: null
+    //       }
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
+
+    async function deleteContact(phone: string) {
       try {
-        const response = await fetch(`${BASE_URL}/affiliate/generate-code/`, {
+        const response = await fetch(`${BASE_URL}/affiliate-onboarding-tests/delete-phone-no/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify({
+            phoneNo: phone
+          })
+        })
+        // 0783649792
+        if (!response.ok) {
+          console.log('I am here')
+          return {
+            result: 'fail',
+            message: 'An error occurred while trying to delete phone number'
+          }
+        } else {
+          return await response.json()
+        }
+      } catch (error) {
+        return {
+          result: 'fail',
+          message: 'An error occurred while trying to delete phone number'
+        }
+      }
+    }
+
+    async function getAffiliateLinks() {
+      const authStore = useAuthStore()
+
+      try {
+        const response = await fetch(`${BASE_URL}/affiliate/get-links`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -554,23 +622,30 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
           },
           mode: 'cors'
         })
-        if(response.ok){
-          const resp = await response.json()
+        if (!response.ok) {
           return {
-            result: true,
-            data: resp.data
+            result: 'fail',
+            message: 'An error occurred while trying to get affiliate links',
+            data: null
+          }
+        } else {
+          const res = await response.json()
+          return {
+            result: res.result,
+            message: 'Affiliate links fetched successfully',
+            data: res.data
           }
         }
-          else {
-            return {
-              result: false,
-              data: null
-            }
-          }
-      } catch (error) {
-        console.log(error)
+      }
+      catch(e) {
+        return {
+          result: 'fail',
+          message: 'An error occurred while trying to get affiliate links',
+          data: null
+        }
       }
     }
+
 
     return {
       openCreateLinkDialog,
@@ -591,7 +666,8 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
       getGender,
       getAge,
       getHighlights,
-      getAffiliateLinks
+      getAffiliateLinks,
+      deleteContact
     }
   }
 )
