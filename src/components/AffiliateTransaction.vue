@@ -72,7 +72,7 @@ const payoutData = [
                   ? 'text-success'
                   : 'text-habahaba-900',
               ]"
-              >{{ payout.status }}</span
+            >{{ payout.status }}</span
             >
             <span class="text-small">{{ payout.payId }}</span>
           </div>
@@ -81,12 +81,13 @@ const payoutData = [
     </div>
     <div v-else class="d-flex flex-column align-items-center justify-content-center">
 
-        <img src="../../public/images/transaction.png" style="width: 30px" class="">
+      <img src="../../public/images/transaction.png" style="width: 30px" class="">
 
 
       <span class="text-gray-500">No available transactions</span>
 
     </div>
+
   </div>
 </template>
 

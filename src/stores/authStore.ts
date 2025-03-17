@@ -18,6 +18,13 @@ export interface AffiliatePayload {
   tnc: boolean
 }
 
+export interface ResetPasswordPayload {
+  token: string
+  userId: number,
+  newPassword: string,
+  confirmPassword: string
+
+}
 export interface AffiliateLoginPayload {
 phoneNo: string
 password: string
