@@ -39,21 +39,26 @@ const routes = [
         path: 'login',
         component: () => import('../views/auth/LoginPage.vue'),
       },
+      {
+        name: 'forgot-password',
+        path: 'forgot-password',
+        component: ()=>import('../views/auth/ForgotPassword.vue')
+      },
+      {
+        name: 'reset-password',
+        path: 'reset-password',
+        component: ()=>import('../views/auth/ResetPassword.vue'),
+        props: (route: RouteLocationNormalized)=>{
+          const { query } = route
+          return {
+            accessToken: query.accessToken,
+          }
+        }
+      }
     ],
     meta: {
       requiresAuth: false,
     },
-    // beforeEnter: (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext)=>{
-    //   const authStore = useAuthStore()
-    //   if(authStore.everLoggedIn){
-    //     next({
-    //       name: 'user-login'
-    //     })
-    //   }
-    //   else{
-    //     next()
-    //   }
-    // }
   },
   {
     name: 'dashboard',
