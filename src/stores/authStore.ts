@@ -116,6 +116,65 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     }
   }
 
+  async function forgotPassword(email: string){
+    try {
+      const response = await fetch(`${BASE_URL}/auth/affiliate/forgot-password/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email
+        })
+      })
+      const data = await response.json()
+      if(!response.ok){
+        return {
+          result: 'fail',
+          message: data.message
+        }
+      }
+      else{
+        return {
+          result: data.result,
+          message: data.message
+        }
+      }
+    }
+    catch(error){
+      return
+    }
+  }
+
+  async function resetPassword(resetPayload: ResetPasswordPayload ){
+    try {
+      const response  = await fetch(`${BASE_URL}/auth/affiliate/reset-password/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(resetPayload)
+      })
+      const data = await response.json()
+      console.log(data)
+      if(!response.ok){
+        return {
+          result: 'fail',
+          message: data.message
+        }
+      }
+      else{
+        return {
+          result: data.result,
+          message: data.message
+        }
+      }
+    }
+    catch(error){
+      return
+    }
+  }
+
   async function setUserData (data: {token: string}){
     setToken(data.token)
     isLoggedIn.value = true
