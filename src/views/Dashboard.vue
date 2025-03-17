@@ -670,7 +670,7 @@ const handelCloseContactModal = ()=>{
         </nav>
       </div>
 
-      <div id="layoutSidenav_content" class="bg-habahaba-100" style="">
+      <div id="layoutSidenav_content" class="bg-habahaba-100 overflow-x-hidden " style="width: 100vw; height: 100vh">
         <div v-if="!affiliateStore.appIsFetching">
           <RouterView #default="{ Component, route }">
             <Transition mode="out-in" appear>

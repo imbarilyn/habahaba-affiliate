@@ -161,7 +161,7 @@ watch(
     <div v-else style="height: 380px; padding-top: 32px">
       <canvas ref="doughnutChart"></canvas>
     </div>
-    <div v-if="isChartDisplay" class="position-absolute d-flex flex-column jus align-items-center">
+    <div v-if="isChartDisplay" class="position-absolute d-flex flex-column align-items-center">
       <span class="text-habahaba-950 fw-500 " style="font-size: 30px">{{cummulativeInteraction}}</span>
       <span class="text-gray-700" style="font-size: 17px">Total Interactions</span>
     </div>
