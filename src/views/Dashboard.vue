@@ -164,6 +164,54 @@ const handleTransaction = ()=>{
     await router.push({name: 'transactions'})
   }, 1000)
 }
+
+
+const shareLink = (social: string, link:string) =>{
+  shareToSocials(social, link)
+}
+
+
+const deletePhone = ref('')
+const deleteContact = () =>{
+  console.log(deletePhone.value)
+  affiliateStore.deleteContact(deletePhone.value as string)
+    .then(resp=>{
+      console.log(resp)
+      if(resp.result !=='fail'){
+        showAlert({
+          type: 'success',
+          message: 'Contact deleted successfully'
+        })
+        // notificationsStore.addNotification('Contact deleted successfully', 'success')
+      }
+      else{
+        showAlert({
+          type: 'error',
+          message: 'Error deleting contact'
+        })
+        // notificationsStore.addNotification('Error deleting contact', 'error')
+      }
+    })
+    .catch(()=>{
+      showAlert({
+        type: 'error',
+        message: 'Error deleting contact'
+      })
+      // notificationsStore.addNotification('Error deleting contact', 'error')
+    })
+    .finally(()=>{
+     handelCloseContactModal()
+    })
+
+}
+const isDeleteContact = ref(false)
+const openDeleteContact = ()=>{
+  isDeleteContact.value = true
+}
+
+const handelCloseContactModal = ()=>{
+  isDeleteContact.value = false
+}
 </script>
 
 <template>

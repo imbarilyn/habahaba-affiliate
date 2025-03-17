@@ -236,6 +236,8 @@ export const useAuthStore = defineStore('useAuthStore', ()=>{
     getToken,
     getIsLoggedIn,
     token,
-    everLoggedIn
+    everLoggedIn,
+    forgotPassword,
+    resetPassword
   }
 })
