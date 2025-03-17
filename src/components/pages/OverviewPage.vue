@@ -280,15 +280,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.main-overview {
-  height: 100vh;
-}
-
-.full-height {
-  min-height: 100vh;
-}
-
-
 .line-graph-size {
   height: 500px;
 }
