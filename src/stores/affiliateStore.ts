@@ -646,6 +646,37 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
       }
     }
 
+    async function getCampaigns(){
+      const authStore = useAuthStore()
+      try {
+        const response = await fetch (`${BASE_URL}/affiliate/campaign-data/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${authStore.token}`
+          }
+        })
+        const res = await response.json()
+        console.log('Campaign res', res)
+        if(!response.ok){
+          return {
+            result: 'fail',
+            message: 'An error occurred while trying to get campaigns',
+          }
+        }
+        else {
+
+          return {
+            result: res.result,
+            data: res.data
+          }
+        }
+      }
+      catch(e) {
+        return
+      }
+    }
+
 
     return {
       openCreateLinkDialog,
@@ -667,7 +698,8 @@ export const useAffiliateStore = defineStore('useAffiliateStore', () => {
       getAge,
       getHighlights,
       getAffiliateLinks,
-      deleteContact
+      deleteContact,
+      getCampaigns
     }
   }
 )
