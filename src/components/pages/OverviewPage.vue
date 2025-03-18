@@ -123,8 +123,8 @@ onMounted(() => {
         <div class="row gap-4 py-4">
           <!-- Dashboard info widget 4-->
 
-          <div class="col smooth-rounded bg-habahaba-900 p-3">
-            <div class="d-flex gap-2">
+          <div class="col smooth-rounded bg-habahaba-900 p-md-3 p-2">
+            <div class="d-flex md-gap-2 gap-1">
               <span class="material-icons-round text-habahaba-300">
                 cloud_download
               </span>
@@ -144,7 +144,7 @@ onMounted(() => {
               <span class="text-habahaba-300 pt-2">No data, please refresh</span>
             </div>
           </div>
-          <div class="col smooth-rounded bg-white p-3">
+          <div class="col smooth-rounded bg-white p-md-3 p-2">
             <div class="d-flex align-items-end">
               <img
                 src="../../../public/images/community-removebg-preview.png"
@@ -161,7 +161,7 @@ onMounted(() => {
               <span class="text-habahaba-900 fw-400 pt-2" >No data, please refresh</span>
             </div>
           </div>
-          <div class="col smooth-rounded bg-white p-3">
+          <div class="col smooth-rounded bg-white p-md-3 p-2">
             <div class="d-flex align-items-end gap-2">
               <img
                 src="../../../public/images/credit.png"
@@ -181,7 +181,7 @@ onMounted(() => {
             </div>
 
           </div>
-          <div class="col smooth-rounded bg-white p-3">
+          <div class="col smooth-rounded bg-white p-md-3 p-2">
             <div class="d-flex align-items-end">
               <img
                 src="../../../public/images/savings.png"
@@ -201,6 +201,45 @@ onMounted(() => {
             </div>
           </div>
         </div>
+      </div>
+      <div class="container">
+        <div class="row row-cols-1 mb-4">
+          <div class="col relative bg-habahaba-200 border  p-3 border-2  border-habahaba-900 smooth-rounded">
+            <div class="row">
+              <div class="col-8 col-lg-9  d-flex gap-3 ">
+                <div class="bg-habahaba-950 rounded-circle d-flex justify-content-center align-items-center" style="height: 40px; width: 40px">
+                  <span class="material-icons-outlined text-habahaba-300">campaign</span>
+                </div>
+                <div class="d-flex flex-column align-items-center  justify-content-center">
+                  <p>Saving Drive Campaign</p>
+                </div>
+              </div>
+              <div class="col">
+                <div v-if="!isCampaignError">
+                  <div class="d-flex gap-2">
+                    <span class="material-icons-outlined fs-3 text-habahaba-950">groups</span>
+                    <span>{{campaignData.community}}</span>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <span class="material-icons-outlined fs-3 text-habahaba-950">monetization_on</span>
+                                      <span>Kes. {{campaignData.amount}}</span>
+<!--                    <span>Kes. 100</span>-->
+                  </div>
+                </div>
+                <div class="pt-lg-4 pt-4 d-flex gap-2 justify-content-center align-items-center" style="opacity: 0.6" v-else>
+                  <span class="material-icons-round fs-lg-1 fs-2 text-habahaba-900">warning</span>
+                  <span class="text-habahaba-900 fw-400 pt-2" >No data, please refresh</span>
+                </div>
+              </div>
+            </div>
+            <div>
+            </div>
+
+
+          </div>
+
+        </div>
+
       </div>
       <div class="row">
         <div class="col-lg-4 mb-4">
