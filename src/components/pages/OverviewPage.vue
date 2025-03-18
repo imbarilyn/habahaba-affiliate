@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted,  type Ref, ref} from 'vue'
+import { computed, onMounted, type Ref, ref } from 'vue'
 import LineChart from '@/components/charts/LineChart.vue'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import {
@@ -71,6 +71,10 @@ const campaignData = ref({
   community: 0
 })
 
+
+const isCampaignDataZero = computed(()=>{
+  return campaignData.value.amount === 0 && campaignData.value.community === 0
+})
 const isCampaignError = ref(false)
 const getCampaignData = ()=>{
   affiliateStore.getCampaigns()
@@ -210,8 +214,10 @@ onMounted(() => {
                 <div class="bg-habahaba-950 rounded-circle d-flex justify-content-center align-items-center" style="height: 40px; width: 40px">
                   <span class="material-icons-outlined text-habahaba-300">campaign</span>
                 </div>
-                <div class="d-flex flex-column align-items-center  justify-content-center">
-                  <p>Saving Drive Campaign</p>
+                <div class="d-flex flex-column  justify-content-center">
+                  <span>Saving Drive Campaign</span>
+                  <span class="fs-6" v-if="isCampaignDataZero">Invite friends to save and earn tokens for each successful saver.</span>
+                  <span class="fs-6" v-else>Yas! Keep going to earn more</span>
                 </div>
               </div>
               <div class="col">
