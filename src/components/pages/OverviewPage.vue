@@ -66,14 +66,38 @@ const getDashboardData = ()=>{
 
     })
 }
+const campaignData = ref({
+ amount: 0,
+  community: 0
+})
+
+const isCampaignError = ref(false)
+const getCampaignData = ()=>{
+  affiliateStore.getCampaigns()
+    .then(res =>{
+      if(res?.data) {
+        campaignData.value = {
+          amount: res.data.amount,
+          community: res.data.community
+        }
+      } else {
+        isCampaignError.value = true
+      }
+    })
+    .catch(err =>{
+      console.log(err)
+      isCampaignError.value = true
+    })
+}
 
 onMounted(() => {
   getDashboardData()
+  getCampaignData()
 
 })
 </script>
 <template>
-  <main class="text-responsive">
+  <main class="text-responsive overflow-y-hidden">
     <!-- Main page content-->
     <div class="container mt-3">
       <!-- Custom page header alternative example-->

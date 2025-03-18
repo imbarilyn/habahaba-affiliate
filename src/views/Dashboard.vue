@@ -627,23 +627,23 @@ const handelCloseContactModal = ()=>{
                 </div>
                 Affiliate Links
               </a>
-              <a
-                class="nav-link collapsed"
-                href="javascript:void(0);"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseLayouts"
-                aria-expanded="false"
-                aria-controls="collapseLayouts"
-                @click="openDeleteContact"
-                :class="[[tabStore.activeTab === 'viewLink'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"
-              >
-                <div class="nav-link-icon">
-                  <span class="material-icons rotate nav-link-icon fs-5" :class="[tabStore.activeTab === 'viewLink'? 'text-habahaba-300': '']">
-                    link
-                  </span>
-                </div>
-                Delete contact
-              </a>
+<!--              <a-->
+<!--                class="nav-link collapsed"-->
+<!--                href="javascript:void(0);"-->
+<!--                data-bs-toggle="collapse"-->
+<!--                data-bs-target="#collapseLayouts"-->
+<!--                aria-expanded="false"-->
+<!--                aria-controls="collapseLayouts"-->
+<!--                @click="openDeleteContact"-->
+<!--                :class="[[tabStore.activeTab === 'viewLink'? 'bg-habahaba-800 rounded-pill mx-1 ': '']]"-->
+<!--              >-->
+<!--                <div class="nav-link-icon">-->
+<!--                  <span class="material-icons rotate nav-link-icon fs-5" :class="[tabStore.activeTab === 'viewLink'? 'text-habahaba-300': '']">-->
+<!--                    link-->
+<!--                  </span>-->
+<!--                </div>-->
+<!--                Delete contact-->
+<!--              </a>-->
             </div>
           </div>
           <!-- Sidenav Footer-->
@@ -670,7 +670,7 @@ const handelCloseContactModal = ()=>{
         </nav>
       </div>
 
-      <div id="layoutSidenav_content" class="bg-habahaba-100 overflow-x-hidden " style="width: 100vw; height: 100vh">
+      <div id="layoutSidenav_content" class="bg-habahaba-100 overflow-x-hidden overflow-y-auto " style="width: 100vw; height: 100vh">
         <div v-if="!affiliateStore.appIsFetching">
           <RouterView #default="{ Component, route }">
             <Transition mode="out-in" appear>
