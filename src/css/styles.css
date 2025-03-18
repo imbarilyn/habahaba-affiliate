@@ -18227,7 +18227,9 @@ body {
     justify-content: space-between;
     min-width: 0;
     flex-grow: 1;
-    min-height: calc(100vh - 3.625rem);
+    /*min-height: calc(100vh - 3.625rem);*/
+
+
     margin-left: -15rem;
 }
 

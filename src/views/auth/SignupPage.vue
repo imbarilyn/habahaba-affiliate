@@ -211,7 +211,7 @@ const passwordValidator = (value: string) => {
   if (!value) {
     return 'Password is required'
   }
-  if (passwordRegExp.test(value)) {
+  if (!passwordRegExp.test(value)) {
     return 'Password must contain at least 8 characters, one uppercase letter, one lowercase letter and one number'
   }
   if (value.length > 10) {
